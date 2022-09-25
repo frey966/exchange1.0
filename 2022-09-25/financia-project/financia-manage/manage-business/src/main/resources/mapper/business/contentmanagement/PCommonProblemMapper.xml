@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.business.contentmanagement.mapper.PCommonProblemMapper">
+    
+    <resultMap type="com.financia.common.PCommonProblem" id="PCommonProblemResult">
+        <result property="id"    column="id"    />
+        <result property="language"    column="language"    />
+        <result property="content"    column="content"    />
+        <result property="title"    column="title"    />
+        <result property="type"    column="type"    />
+        <result property="sort"    column="sort"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="imageUrl"    column="image_url"    />
+        <result property="status"    column="status"    />
+
+    </resultMap>
+
+    <sql id="selectPCommonProblemVo">
+        select id, language, content, title, type, sort, create_time, update_time,status,image_url from p_common_problem
+    </sql>
+
+    <select id="selectPCommonProblemList" parameterType="com.financia.common.PCommonProblem" resultMap="PCommonProblemResult">
+        <include refid="selectPCommonProblemVo"/>
+        <where>  
+            <if test="language != null  and language != ''"> and language = #{language}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
+            <if test="type != null "> and type = #{type}</if>
+        </where>
+    </select>
+    
+    <select id="selectPCommonProblemById" parameterType="Long" resultMap="PCommonProblemResult">
+        <include refid="selectPCommonProblemVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPCommonProblem" parameterType="com.financia.common.PCommonProblem" useGeneratedKeys="true" keyProperty="id">
+        insert into p_common_problem
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="language != null and language != ''">language,</if>
+            <if test="content != null and content != ''">content,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="type != null">type,</if>
+            <if test="sort != null">sort,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="status != null">status,</if>
+            <if test="imageUrl != null and imageUrl != ''">image_url,</if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="language != null and language != ''">#{language},</if>
+            <if test="content != null and content != ''">#{content},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="type != null">#{type},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="status != null">#{status},</if>
+            <if test="imageUrl != null and imageUrl != ''">#{imageUrl},</if>
+
+        </trim>
+    </insert>
+
+    <update id="updatePCommonProblem" parameterType="com.financia.common.PCommonProblem">
+        update p_common_problem
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="language != null and language != ''">language = #{language},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="imageUrl != null ">image_url = #{imageUrl},</if>
+            update_time = CURRENT_TIMESTAMP ,
+
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePCommonProblemById" parameterType="Long">
+        delete from p_common_problem where id = #{id}
+    </delete>
+
+    <delete id="deletePCommonProblemByIds" parameterType="String">
+        delete from p_common_problem where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

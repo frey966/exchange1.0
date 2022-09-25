@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.business.contentmanagement.mapper.PublicCarouselHomeMapper">
+    
+    <resultMap type="com.financia.exchange.PublicCarouselHome" id="PCarouselHomeResult">
+        <result property="id"    column="id"    />
+        <result property="imageName"    column="image_name"    />
+        <result property="details"    column="details"    />
+        <result property="url"    column="url"    />
+        <result property="imageUrl"    column="image_url"    />
+        <result property="sort"    column="sort"    />
+        <result property="active"    column="active"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectPCarouselHomeVo">
+        select id, image_name, details, url, image_url, sort,active,language,position, create_time, update_time from p_carousel_home
+    </sql>
+
+    <select id="selectPCarouselHomeList" parameterType="com.financia.exchange.PublicCarouselHome" resultMap="PCarouselHomeResult">
+        <include refid="selectPCarouselHomeVo"/>
+        <where>  
+            <if test="imageName != null  and imageName != ''"> and image_name like concat('%', #{imageName}, '%')</if>
+            <if test="details != null  and details != ''"> and details = #{details}</if>
+            <if test="url != null  and url != ''"> and url = #{url}</if>
+            <if test="imageUrl != null  and imageUrl != ''"> and image_url = #{imageUrl}</if>
+            <if test="sort != null "> and sort = #{sort}</if>
+            <if test="active != null "> and active = #{active}</if>
+            <if test="language != null "> and language = #{language}</if>
+            <if test="position != null "> and position = #{position}</if>
+        </where>
+    </select>
+    
+    <select id="selectPCarouselHomeById" parameterType="Long" resultMap="PCarouselHomeResult">
+        <include refid="selectPCarouselHomeVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPCarouselHome" parameterType="com.financia.exchange.PublicCarouselHome" useGeneratedKeys="true" keyProperty="id">
+        insert into p_carousel_home
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="imageName != null and imageName != ''">image_name,</if>
+            <if test="details != null">details,</if>
+            <if test="url != null and url != ''">url,</if>
+            <if test="imageUrl != null and imageUrl != ''">image_url,</if>
+            <if test="sort != null">sort,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="active != null">active,</if>
+            <if test="language != null">language,</if>
+            <if test="position != null">position,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="imageName != null and imageName != ''">#{imageName},</if>
+            <if test="details != null">#{details},</if>
+            <if test="url != null and url != ''">#{url},</if>
+            <if test="imageUrl != null and imageUrl != ''">#{imageUrl},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="active != null">active,</if>
+            <if test="language != null">language,</if>
+            <if test="position != null">position,</if>
+         </trim>
+    </insert>
+
+    <update id="updatePCarouselHome" parameterType="com.financia.exchange.PublicCarouselHome">
+        update p_carousel_home
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="imageName != null and imageName != ''">image_name = #{imageName},</if>
+            <if test="details != null">details = #{details},</if>
+            <if test="url != null and url != ''">url = #{url},</if>
+            <if test="imageUrl != null and imageUrl != ''">image_url = #{imageUrl},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="active != null">active = #{active},</if>
+            <if test="language != null">language = #{language},</if>
+            <if test="position != null">position = #{position},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePCarouselHomeById" parameterType="Long">
+        delete from p_carousel_home where id = #{id}
+    </delete>
+
+    <delete id="deletePCarouselHomeByIds" parameterType="String">
+        delete from p_carousel_home where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

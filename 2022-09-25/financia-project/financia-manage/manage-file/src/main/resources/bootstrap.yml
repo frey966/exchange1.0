@@ -1,0 +1,48 @@
+# Tomcat
+server:
+  port: 9202
+# Spring
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  application:
+    # 应用名称
+    name: financia-file
+  profiles:
+    # 环境配置
+    active: dev
+  cloud:
+    sentinel:
+      btransport:
+      #配置sentinel dashboard地址
+      dashboard: localhost:8080
+      #默认8719端口，假如被占用会自动从8719开始依次+1扫描，直至找到未被占用的端口
+      port: 8719
+    eager: true
+    nacos:
+      username: nacosAPP
+      password: nacosAPP
+      discovery:
+        # 服务注册地址
+        server-addr: 54.169.76.123:8848
+        namespace: financia-manage
+      config:
+        # 配置中心地址
+        server-addr: 54.169.76.123:8848
+        # 配置文件格式
+        file-extension: yml
+        # 共享配置
+        shared-configs:
+          - application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+        namespace: financia-manage
+# swagger配置
+swagger:
+  title: 系统模块接口文档
+  license: Powered By dev
+  licenseUrl: 127.0.0.1
+aliyun:
+  accessKeyId: 'LTAI5tKdykfhPvDC58FhcZuf'
+  accessKeySecret: 'IowqsVsAr6bfWVAxJkBAdmdpH1aIGE'
+  ossEndpoint: 'oss-ap-southeast-1.aliyuncs.com'
+  ossBucketName: 'co-base'

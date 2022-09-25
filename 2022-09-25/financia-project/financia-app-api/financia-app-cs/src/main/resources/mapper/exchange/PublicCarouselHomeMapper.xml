@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.financia.exchange.mapper.PublicCarouselHomeMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.financia.exchange.PublicCarouselHome" id="publicCarouselHomeMap">
+        <result property="id" column="id"/>
+        <result property="imageName" column="image_name"/>
+        <result property="details" column="details"/>
+        <result property="url" column="url"/>
+        <result property="imageUrl" column="image_url"/>
+        <result property="sort" column="sort"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+</mapper>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.conversion.exchange.mapper.MemberExchangeOrderMapper">
+    
+    <resultMap type="com.financia.exchange.vo.MemberConversionVo" id="MemberExchangeOrderResult">
+        <result property="id"    column="id"    />
+        <result property="coinName" column="exchange_coin_name"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="orderNo"    column="order_no"    />
+        <result property="coinId"    column="coin_id"    />
+        <result property="memberId"    column="member_id"    />
+        <result property="exchangeAmount"    column="exchange_amount"    />
+        <result property="exchangeRate"    column="exchange_rate"    />
+        <result property="nationalMoney"    column="national_money"    />
+        <result property="orderStatus"    column="order_status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectMemberExchangeOrderVo">
+        SELECT p.exchange_coin_name,
+               o.id,
+               m.phone,
+               m.email,
+               o.exchange_amount,
+               o.national_money,
+               o.exchange_rate,
+               o.order_status,
+               o.order_no,
+               o.create_time
+        FROM member_exchange_order o
+        left join member m on o.member_id=m.id
+        left join p_national_currency p on p.id=o.coin_id
+    </sql>
+
+    <select id="selectMemberExchangeOrderList" parameterType="com.financia.exchange.vo.MemberConversionVo" resultMap="MemberExchangeOrderResult">
+        <include refid="selectMemberExchangeOrderVo"/>
+        <where>  
+            <if test="orderNo != null  and orderNo != ''"> and order_no = #{orderNo}</if>
+            <if test="coinId != null  and coinId != ''"> and coin_id = #{coinId}</if>
+            <if test="memberId != null "> and member_id = #{memberId}</if>
+            <if test="exchangeAmount != null "> and exchange_amount = #{exchangeAmount}</if>
+            <if test="exchangeRate != null "> and exchange_rate = #{exchangeRate}</if>
+            <if test="nationalMoney != null "> and national_money = #{nationalMoney}</if>
+            <if test="orderStatus != null "> and order_status = #{orderStatus}</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+        order by o.create_time desc
+    </select>
+    
+    <select id="selectMemberExchangeOrderById" parameterType="Long" resultMap="MemberExchangeOrderResult">
+        <include refid="selectMemberExchangeOrderVo"/>
+        where o.id = #{id}
+    </select>
+        
+    <insert id="insertMemberExchangeOrder" parameterType="com.financia.exchange.vo.MemberConversionVo" useGeneratedKeys="true" keyProperty="id">
+        insert into member_exchange_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            order_no,
+            <if test="coinId != null and coinId != ''">coin_id,</if>
+            <if test="memberId != null">member_id,</if>
+            <if test="exchangeAmount != null">exchange_amount,</if>
+            <if test="exchangeRate != null">exchange_rate,</if>
+            <if test="nationalMoney != null">national_money,</if>
+            <if test="orderStatus != null">order_status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            now()+FLOOR(RAND()*500000 + 500000),
+            <if test="coinId != null and coinId != ''">#{coinId},</if>
+            <if test="memberId != null">#{memberId},</if>
+            <if test="exchangeAmount != null">#{exchangeAmount},</if>
+            <if test="exchangeRate != null">#{exchangeRate},</if>
+            <if test="nationalMoney != null">#{nationalMoney},</if>
+            <if test="orderStatus != null">#{orderStatus},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMemberExchangeOrder" parameterType="com.financia.exchange.vo.MemberConversionVo">
+        update member_exchange_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderNo != null">order_no = #{orderNo},</if>
+            <if test="coinId != null and coinId != ''">coin_id = #{coinId},</if>
+            <if test="memberId != null">member_id = #{memberId},</if>
+            <if test="exchangeAmount != null">exchange_amount = #{exchangeAmount},</if>
+            <if test="exchangeRate != null">exchange_rate = #{exchangeRate},</if>
+            <if test="nationalMoney != null">national_money = #{nationalMoney},</if>
+            <if test="orderStatus != null">order_status = #{orderStatus},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMemberExchangeOrderById" parameterType="Long">
+        delete from member_exchange_order where id = #{id}
+    </delete>
+
+    <delete id="deleteMemberExchangeOrderByIds" parameterType="String">
+        delete from member_exchange_order where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

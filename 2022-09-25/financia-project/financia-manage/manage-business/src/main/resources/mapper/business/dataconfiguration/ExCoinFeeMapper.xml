@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.business.dataconfiguration.mapper.ExCoinFeeMapper">
+    
+    <resultMap type="com.financia.business.ExCoinFee" id="ExCoinFeeResult">
+        <result property="id"    column="id"    />
+        <result property="minLever"    column="min_lever"    />
+        <result property="maxLever"    column="max_lever"    />
+        <result property="rate"    column="rate"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="name"    column="name"    />
+    </resultMap>
+
+    <sql id="selectExCoinFeeVo">
+        select id, min_lever, max_lever, rate, status, create_time,name from ex_coin_fee
+    </sql>
+
+    <select id="selectExCoinFeeList" parameterType="com.financia.business.ExCoinFee" resultMap="ExCoinFeeResult">
+        <include refid="selectExCoinFeeVo"/>
+        <where>  
+            <if test="minLever != null "> and min_lever = #{minLever}</if>
+            <if test="maxLever != null "> and max_lever = #{maxLever}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="name != null "> and name = #{name}</if>
+        </where>
+    </select>
+    
+    <select id="selectExCoinFeeById" parameterType="Long" resultMap="ExCoinFeeResult">
+        <include refid="selectExCoinFeeVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertExCoinFee" parameterType="com.financia.business.ExCoinFee" useGeneratedKeys="true" keyProperty="id">
+        insert into ex_coin_fee
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="minLever != null">min_lever,</if>
+            <if test="maxLever != null">max_lever,</if>
+            <if test="rate != null">rate,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="name != null">name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="minLever != null">#{minLever},</if>
+            <if test="maxLever != null">#{maxLever},</if>
+            <if test="rate != null">#{rate},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="name != null">#{name},</if>
+         </trim>
+    </insert>
+
+    <update id="updateExCoinFee" parameterType="com.financia.business.ExCoinFee">
+        update ex_coin_fee
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="minLever != null">min_lever = #{minLever},</if>
+            <if test="maxLever != null">max_lever = #{maxLever},</if>
+            <if test="rate != null">rate = #{rate},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="name != null">name = #{name},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteExCoinFeeById" parameterType="Long">
+        delete from ex_coin_fee where id = #{id}
+    </delete>
+
+    <delete id="deleteExCoinFeeByIds" parameterType="String">
+        delete from ex_coin_fee where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

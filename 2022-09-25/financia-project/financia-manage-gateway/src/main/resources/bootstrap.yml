@@ -1,0 +1,44 @@
+# Tomcat
+server:
+  port: 8601
+
+# Spring
+spring: 
+  application:
+    # 应用名称
+    name: financia-manage-gateway
+  profiles:
+    # 环境配置
+    active: dev
+  cloud:
+    nacos:
+      username: nacosAPP
+      password: nacosAPP
+      discovery:
+        # 服务注册地址
+        server-addr: 54.169.76.123:8848
+        namespace: financia-manage
+      config:
+        # 配置中心地址
+        server-addr: 54.169.76.123:8848
+        # 配置文件格式
+        file-extension: yml
+        # 共享配置
+        shared-configs:
+          - application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+        namespace: financia-manage
+    sentinel:
+      # 取消控制台懒加载
+      eager: true
+      transport:
+        # 控制台地址
+        dashboard: 54.169.76.123:9001
+      # nacos配置持久化
+      datasource:
+        ds1:
+          nacos:
+            server-addr: 54.169.76.123:8848
+            dataId: sentinel-financia-gateway
+            groupId: DEFAULT_GROUP
+            data-type: json
+            rule-type: flow

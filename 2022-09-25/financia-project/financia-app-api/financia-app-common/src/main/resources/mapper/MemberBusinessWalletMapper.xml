@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.financia.system.mapper.MemberBusinessWalletMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.financia.exchange.MemberBusinessWallet" id="memberBusinessWalletMap">
+        <result property="id" column="id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="money" column="money"/>
+        <result property="type" column="type"/>
+        <result property="createTime" column="create_time"/>
+        <result property="status" column="status"/>
+    </resultMap>
+    <select id="updateSubBalance" resultType="java.math.BigDecimal">
+        UPDATE
+            member_business_wallet
+        SET
+            `money` = `money` - #{money}
+        WHERE
+            member_id = #{memberId};
+    </select>
+</mapper>

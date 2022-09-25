@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.business.dataconfiguration.mapper.PConversionRateMapper">
+    
+    <resultMap type="com.financia.exchange.PConversionRate" id="PConversionRateResult">
+        <result property="id"    column="id"    />
+        <result property="currencySymbol"    column="currency_symbol"    />
+        <result property="currencyName"    column="currency_name"    />
+        <result property="baseCurrency"    column="base_currency"    />
+        <result property="conversionRate"    column="conversion_rate"    />
+        <result property="currencyPath"    column="currency_path"    />
+        <result property="active"    column="active"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="currencyId"    column="currency_id"    />
+        <result property="sort"    column="sort"    />
+    </resultMap>
+
+    <sql id="selectPConversionRateVo">
+        select id, currency_symbol, currency_name, base_currency, conversion_rate, currency_path, active, create_time, update_time,currency_id,sort from p_conversion_rate
+    </sql>
+
+    <select id="selectPConversionRateList" parameterType="com.financia.exchange.PConversionRate" resultMap="PConversionRateResult">
+        <include refid="selectPConversionRateVo"/>
+        <where>  
+            <if test="currencySymbol != null  and currencySymbol != ''"> and currency_symbol like concat('%', #{currencySymbol}, '%')</if>
+            <if test="currencyName != null  and currencyName != ''"> and currency_name like concat('%', #{currencyName}, '%')</if>
+            <if test="baseCurrency != null  and baseCurrency != ''"> and base_currency like concat('%', #{baseCurrency}, '%')</if>
+            <if test="conversionRate != null "> and conversion_rate like concat('%', #{conversionRate}, '%')</if>
+            <if test="active != null  and active != ''"> and active = #{active}</if>
+            <if test="currencyId != null  and currencyId != ''"> and currency_id = #{currencyId}</if>
+            <if test="sort != null  and sort != ''"> and sort = #{sort}</if>
+        </where>
+        order by sort desc,active desc
+    </select>
+    
+    <select id="selectPConversionRateById" parameterType="Long" resultMap="PConversionRateResult">
+        <include refid="selectPConversionRateVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPConversionRate" parameterType="com.financia.exchange.PConversionRate" useGeneratedKeys="true" keyProperty="id">
+        insert into p_conversion_rate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="currencySymbol != null">currency_symbol,</if>
+            <if test="currencyName != null">currency_name,</if>
+            <if test="baseCurrency != null">base_currency,</if>
+            <if test="conversionRate != null">conversion_rate,</if>
+            <if test="currencyPath != null">currency_path,</if>
+            <if test="active != null">active,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="currencyId != null">currency_id,</if>
+            <if test="sort != null">sort,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="currencySymbol != null">#{currencySymbol},</if>
+            <if test="currencyName != null">#{currencyName},</if>
+            <if test="baseCurrency != null">#{baseCurrency},</if>
+            <if test="conversionRate != null">#{conversionRate},</if>
+            <if test="currencyPath != null">#{currencyPath},</if>
+            <if test="active != null">#{active},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="currencyId != null">#{currencyId},</if>
+            <if test="sort != null">#{sort},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePConversionRate" parameterType="com.financia.exchange.PConversionRate">
+        update p_conversion_rate
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="currencySymbol != null">currency_symbol = #{currencySymbol},</if>
+            <if test="currencyName != null">currency_name = #{currencyName},</if>
+            <if test="baseCurrency != null">base_currency = #{baseCurrency},</if>
+            <if test="conversionRate != null">conversion_rate = #{conversionRate},</if>
+            <if test="currencyPath != null">currency_path = #{currencyPath},</if>
+            <if test="active != null">active = #{active},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="currencyId != null">currency_id = #{currencyId},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            update_time = date_format(now(),'%Y-%m-%d %H:%i:%s')
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePConversionRateById" parameterType="Long">
+        delete from p_conversion_rate where id = #{id}
+    </delete>
+
+    <delete id="deletePConversionRateByIds" parameterType="String">
+        delete from p_conversion_rate where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

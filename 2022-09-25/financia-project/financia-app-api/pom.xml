@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.financia</groupId>
+        <artifactId>financia-project</artifactId>
+        <version>3.5.0</version>
+        <relativePath/>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <modules>
+        <module>financia-app-exchange</module>
+        <module>financia-app-common</module>
+        <module>financia-app-senta</module>
+        <module>financia-app-websock</module>
+        <module>financia-app-stock</module>
+        <module>financia-app-swap</module>
+        <module>financia-app-quotes</module>
+        <module>financia-app-quantitative</module>
+        <module>financia-app-conversion</module>
+        <module>financia-app-super_leverage</module>
+        <module>financia-app-currency_trading</module>
+        <module>financia-app-cs</module>
+    </modules>
+
+    <artifactId>financia-app-api</artifactId>
+    <packaging>pom</packaging>
+
+    <description>
+        financia-app业务模块
+    </description>
+
+
+</project>

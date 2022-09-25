@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.common.mapper.PCompanyTrxTransferOrderMapper">
+    
+    <resultMap type="com.financia.common.PCompanyTrxTransferOrder" id="PCompanyTrxTransferOrderResult">
+        <result property="id"    column="id"    />
+        <result property="memberId"    column="member_id"    />
+        <result property="hex"    column="hex"    />
+        <result property="fromAddress"    column="from_address"    />
+        <result property="toAddress"    column="to_address"    />
+        <result property="chainId"    column="chain_id"    />
+        <result property="transferTrx"    column="transfer_trx"    />
+        <result property="withdrowAmount"    column="withdrow_amount"    />
+        <result property="orderStatus"    column="order_status"    />
+        <result property="chainName"    column="chain_name"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="objUpdateTime"    column="obj_update_time"    />
+        <result property="username"    column="username"    />
+        <result property="pcwawithdrowAmount"    column="pcwawithdrowAmount"    />
+    </resultMap>
+
+    <sql id="selectPCompanyTrxTransferOrderVo">
+        select pctto.*,m.username,pcwa.private_key,pcwa.address,pcwa.withdrow_amount pcwawithdrowAmount
+        from p_company_trx_transfer_order pctto
+        left join member m on m.id=pctto.member_id
+        left join p_company_wallet_address pcwa on pcwa.address=pctto.from_address
+    </sql>
+
+    <select id="selectPCompanyTrxTransferOrderList" parameterType="com.financia.common.PCompanyTrxTransferOrder" resultMap="PCompanyTrxTransferOrderResult">
+        <include refid="selectPCompanyTrxTransferOrderVo"/>
+        <where>  
+            <if test="memberId != null  and memberId != ''"> and pctto.member_id = #{memberId}</if>
+            <if test="hex != null  and hex != ''"> and pctto.hex = #{hex}</if>
+            <if test="fromAddress != null  and fromAddress != ''"> and pctto.from_address = #{fromAddress}</if>
+            <if test="toAddress != null  and toAddress != ''"> and pctto.to_address = #{toAddress}</if>
+            <if test="chainId != null "> and pctto.chain_id = #{chainId}</if>
+            <if test="transferTrx != null "> and pctto.transfer_trx = #{transferTrx}</if>
+            <if test="withdrowAmount != null "> and pctto.withdrow_amount = #{withdrowAmount}</if>
+            <if test="orderStatus != null "> and pctto.order_status = #{orderStatus}</if>
+            <if test="chainName != null  and chainName != ''"> and pctto.chain_name like concat('%', #{chainName}, '%')</if>
+            <if test="objUpdateTime != null  and objUpdateTime != ''"> and pctto.obj_update_time = #{objUpdateTime}</if>
+            <if test="username != null "> and m.username = #{username}</if>
+        </where>
+    </select>
+    
+    <select id="selectPCompanyTrxTransferOrderById" parameterType="Long" resultMap="PCompanyTrxTransferOrderResult">
+        <include refid="selectPCompanyTrxTransferOrderVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPCompanyTrxTransferOrder" parameterType="com.financia.common.PCompanyTrxTransferOrder" useGeneratedKeys="true" keyProperty="id">
+        insert into p_company_trx_transfer_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="memberId != null and memberId != ''">member_id,</if>
+            <if test="hex != null and hex != ''">hex,</if>
+            <if test="fromAddress != null and fromAddress != ''">from_address,</if>
+            <if test="toAddress != null and toAddress != ''">to_address,</if>
+            <if test="chainId != null">chain_id,</if>
+            <if test="transferTrx != null">transfer_trx,</if>
+            <if test="withdrowAmount != null">withdrow_amount,</if>
+            <if test="orderStatus != null">order_status,</if>
+            <if test="chainName != null">chain_name,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="objUpdateTime != null">obj_update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="memberId != null and memberId != ''">#{memberId},</if>
+            <if test="hex != null and hex != ''">#{hex},</if>
+            <if test="fromAddress != null and fromAddress != ''">#{fromAddress},</if>
+            <if test="toAddress != null and toAddress != ''">#{toAddress},</if>
+            <if test="chainId != null">#{chainId},</if>
+            <if test="transferTrx != null">#{transferTrx},</if>
+            <if test="withdrowAmount != null">#{withdrowAmount},</if>
+            <if test="orderStatus != null">#{orderStatus},</if>
+            <if test="chainName != null">#{chainName},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="objUpdateTime != null">#{objUpdateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePCompanyTrxTransferOrder" parameterType="com.financia.common.PCompanyTrxTransferOrder">
+        update p_company_trx_transfer_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="memberId != null and memberId != ''">member_id = #{memberId},</if>
+            <if test="hex != null and hex != ''">hex = #{hex},</if>
+            <if test="fromAddress != null and fromAddress != ''">from_address = #{fromAddress},</if>
+            <if test="toAddress != null and toAddress != ''">to_address = #{toAddress},</if>
+            <if test="chainId != null">chain_id = #{chainId},</if>
+            <if test="transferTrx != null">transfer_trx = #{transferTrx},</if>
+            <if test="withdrowAmount != null">withdrow_amount = #{withdrowAmount},</if>
+            <if test="orderStatus != null">order_status = #{orderStatus},</if>
+            <if test="chainName != null">chain_name = #{chainName},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="objUpdateTime != null">obj_update_time = #{objUpdateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePCompanyTrxTransferOrderById" parameterType="Long">
+        delete from p_company_trx_transfer_order where id = #{id}
+    </delete>
+
+    <delete id="deletePCompanyTrxTransferOrderByIds" parameterType="String">
+        delete from p_company_trx_transfer_order where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

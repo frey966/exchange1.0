@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.business.dataconfiguration.mapper.PCryptoCurrencyMapper">
+    
+    <resultMap type="com.financia.exchange.PCryptoCurrency" id="PCryptoCurrencyResult">
+        <result property="id"    column="id"    />
+        <result property="coinName"    column="coin_name"    />
+        <result property="imageUrl"    column="image_url"    />
+        <result property="coinId"    column="coin_id"    />
+        <result property="status"    column="status"    />
+        <result property="ranking"    column="ranking"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectPCryptoCurrencyVo">
+        select id, coin_name, image_url, coin_id, status, ranking, update_time, create_time from p_crypto_currency
+    </sql>
+
+    <select id="selectPCryptoCurrencyList" parameterType="com.financia.exchange.PCryptoCurrency" resultMap="PCryptoCurrencyResult">
+        <include refid="selectPCryptoCurrencyVo"/>
+        <where>
+            <if test="status != null"> and status = #{status}</if>
+            <if test="coinName != null  and coinName != ''"> and coin_name like concat('%', #{coinName}, '%')</if>
+        </where>
+        order by create_time desc
+    </select>
+    
+    <select id="selectPCryptoCurrencyById" parameterType="Long" resultMap="PCryptoCurrencyResult">
+        <include refid="selectPCryptoCurrencyVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPCryptoCurrency" parameterType="com.financia.exchange.PCryptoCurrency" useGeneratedKeys="true" keyProperty="id">
+        insert into p_crypto_currency
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="coinName != null">coin_name,</if>
+            <if test="imageUrl != null">image_url,</if>
+            <if test="coinId != null and coinId != ''">coin_id,</if>
+            <if test="status != null">status,</if>
+            <if test="ranking != null">ranking,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="coinName != null">#{coinName},</if>
+            <if test="imageUrl != null">#{imageUrl},</if>
+            <if test="coinId != null and coinId != ''">#{coinId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="ranking != null">#{ranking},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePCryptoCurrency" parameterType="com.financia.exchange.PCryptoCurrency">
+        update p_crypto_currency
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="coinName != null">coin_name = #{coinName},</if>
+            <if test="imageUrl != null">image_url = #{imageUrl},</if>
+            <if test="coinId != null and coinId != ''">coin_id = #{coinId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="ranking != null">ranking = #{ranking},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            update_time = date_format(now(),'%Y-%m-%d %H:%i:%s')
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePCryptoCurrencyById" parameterType="Long">
+        delete from p_crypto_currency where id = #{id}
+    </delete>
+
+    <delete id="deletePCryptoCurrencyByIds" parameterType="String">
+        delete from p_crypto_currency where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

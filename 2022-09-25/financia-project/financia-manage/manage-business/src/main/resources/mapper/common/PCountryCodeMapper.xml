@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.common.mapper.PCountryCodeMapper">
+    
+    <resultMap type="com.financia.common.PCountryCode" id="PCountryCodeResult">
+        <result property="id"    column="id"    />
+        <result property="cn"    column="cn"    />
+        <result property="en"    column="en"    />
+        <result property="phoneCode"    column="phone_code"    />
+        <result property="active"    column="active"    />
+    </resultMap>
+
+    <sql id="selectPCountryCodeVo">
+        select id, cn, en, phone_code, active from p_country_code
+    </sql>
+
+    <select id="selectPCountryCodeList" parameterType="com.financia.common.PCountryCode" resultMap="PCountryCodeResult">
+        <include refid="selectPCountryCodeVo"/>
+        <where>  
+            <if test="cn != null  and cn != ''"> and cn like concat('%', #{cn}, '%')</if>
+            <if test="en != null  and en != ''"> and en like concat('%', #{en}, '%')</if>
+            <if test="phoneCode != null  and phoneCode != ''"> and phone_code like concat('%', #{phoneCode}, '%')</if>
+            <if test="active != null "> and active = #{active}</if>
+        </where>
+    </select>
+    
+    <select id="selectPCountryCodeById" parameterType="Long" resultMap="PCountryCodeResult">
+        <include refid="selectPCountryCodeVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPCountryCode" parameterType="com.financia.common.PCountryCode" useGeneratedKeys="true" keyProperty="id">
+        insert into p_country_code
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cn != null">cn,</if>
+            <if test="en != null">en,</if>
+            <if test="phoneCode != null">phone_code,</if>
+            <if test="active != null">active,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cn != null">#{cn},</if>
+            <if test="en != null">#{en},</if>
+            <if test="phoneCode != null">#{phoneCode},</if>
+            <if test="active != null">#{active},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePCountryCode" parameterType="com.financia.common.PCountryCode">
+        update p_country_code
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="cn != null">cn = #{cn},</if>
+            <if test="en != null">en = #{en},</if>
+            <if test="phoneCode != null">phone_code = #{phoneCode},</if>
+            <if test="active != null">active = #{active},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePCountryCodeById" parameterType="Long">
+        delete from p_country_code where id = #{id}
+    </delete>
+
+    <delete id="deletePCountryCodeByIds" parameterType="String">
+        delete from p_country_code where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bizzan.bitrade.generator.dao.FinanceDepositMemberMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.financia.finance.FinanceDepositMember" id="financeDepositMemberMap">
+        <result property="id" column="id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="financeId" column="finance_id"/>
+        <result property="financeZhName" column="finance_zh_name"/>
+        <result property="depositAmount" column="deposit_amount"/>
+        <result property="depositCloseDay" column="deposit_close_day"/>
+        <result property="depositBeginTime" column="deposit_begin_time"/>
+        <result property="depositEndTime" column="deposit_end_time"/>
+        <result property="everydayRate" column="everyday_rate"/>
+        <result property="incomeAmount" column="income_amount"/>
+        <result property="estimateIncomeAmount" column="estimate_income_amount"/>
+        <result property="profitCustomer" column="profit_customer"/>
+        <result property="settleAccountsStatus" column="settle_accounts_status"/>
+        <result property="active" column="active"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="username" column="username"/>
+    </resultMap>
+
+
+</mapper>

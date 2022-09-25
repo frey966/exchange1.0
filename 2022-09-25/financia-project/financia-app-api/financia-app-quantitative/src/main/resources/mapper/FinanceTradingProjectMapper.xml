@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.financia.quantitative.mapper.FinanceTradingProjectMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.financia.finance.FinanceTradingProject" id="financeTradingProjectMap">
+        <result property="financeId" column="finance_id"/>
+        <result property="projectType" column="project_type"/>
+        <result property="projectTypeName" column="project_type_name"/>
+        <result property="imageUrl" column="image_url"/>
+        <result property="financeProgress" column="finance_progress"/>
+        <result property="financeZhName" column="finance_zh_name"/>
+        <result property="financeEnName" column="finance_en_name"/>
+        <result property="depositMinAmount" column="deposit_min_amount"/>
+        <result property="depositSingleMaxAmount" column="deposit_single_max_amount"/>
+        <result property="everydayRate" column="everyday_rate"/>
+        <result property="annualType" column="annual_type"/>
+        <result property="showRate" column="show_rate"/>
+        <result property="label" column="label"/>
+        <result property="depositSingleMinAmount" column="deposit_single_min_amount"/>
+        <result property="depositBeginTime" column="deposit_begin_time"/>
+        <result property="depositEndTime" column="deposit_end_time"/>
+        <result property="depositCloseDay" column="deposit_close_day"/>
+        <result property="incomeRule" column="income_rule"/>
+        <result property="withdrawRule" column="withdraw_rule"/>
+        <result property="incomeAmount" column="income_amount"/>
+        <result property="incomeToAccount" column="income_to_account"/>
+        <result property="incomeToAccountWay" column="income_to_account_way"/>
+        <result property="incomeDailyInterest" column="income_daily_interest"/>
+        <result property="profitCustomer" column="profit_customer"/>
+        <result property="profitOperator" column="profit_operator"/>
+        <result property="active" column="active"/>
+        <result property="ishome" column="ishome"/>
+        <result property="content" column="content"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+</mapper>

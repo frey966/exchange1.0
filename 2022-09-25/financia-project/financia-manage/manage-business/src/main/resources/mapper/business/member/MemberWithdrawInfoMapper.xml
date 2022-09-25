@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.business.member.mapper.MemberWithdrawInfoMapper">
+    
+    <resultMap type="com.financia.exchange.MemberWithdrawInfo" id="MemberWithdrawInfoResult">
+        <result property="id"    column="id"    />
+        <result property="memberId"    column="member_id"    />
+        <result property="fromAddress"    column="from_address"    />
+        <result property="toAddress"    column="to_address"    />
+        <result property="tradeCount"    column="trade_count"    />
+        <result property="sumWithdrawMoney"    column="sum_withdraw_money"    />
+        <result property="chainId"    column="chain_id"    />
+        <result property="chainName"    column="chain_name"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectMemberWithdrawInfoVo">
+        select id, member_id, from_address, to_address, trade_count, sum_withdraw_money, chain_id, chain_name, update_time, create_time, status from member_withdraw_info
+    </sql>
+
+    <select id="selectMemberWithdrawInfoList" parameterType="com.financia.exchange.MemberWithdrawInfo" resultMap="MemberWithdrawInfoResult">
+        <include refid="selectMemberWithdrawInfoVo"/>
+        <where>  
+            <if test="memberId != null "> and member_id = #{memberId}</if>
+            <if test="fromAddress != null  and fromAddress != ''"> and from_address = #{fromAddress}</if>
+            <if test="toAddress != null  and toAddress != ''"> and to_address = #{toAddress}</if>
+            <if test="chainId != null "> and chain_id = #{chainId}</if>
+            <if test="chainName != null  and chainName != ''"> and chain_name like concat('%', #{chainName}, '%')</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectMemberWithdrawInfoById" parameterType="Long" resultMap="MemberWithdrawInfoResult">
+        <include refid="selectMemberWithdrawInfoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertMemberWithdrawInfo" parameterType="com.financia.exchange.MemberWithdrawInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into member_withdraw_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="memberId != null">member_id,</if>
+            <if test="fromAddress != null">from_address,</if>
+            <if test="toAddress != null">to_address,</if>
+            <if test="tradeCount != null">trade_count,</if>
+            <if test="sumWithdrawMoney != null">sum_withdraw_money,</if>
+            <if test="chainId != null">chain_id,</if>
+            <if test="chainName != null">chain_name,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="memberId != null">#{memberId},</if>
+            <if test="fromAddress != null">#{fromAddress},</if>
+            <if test="toAddress != null">#{toAddress},</if>
+            <if test="tradeCount != null">#{tradeCount},</if>
+            <if test="sumWithdrawMoney != null">#{sumWithdrawMoney},</if>
+            <if test="chainId != null">#{chainId},</if>
+            <if test="chainName != null">#{chainName},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMemberWithdrawInfo" parameterType="com.financia.exchange.MemberWithdrawInfo">
+        update member_withdraw_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="memberId != null">member_id = #{memberId},</if>
+            <if test="fromAddress != null">from_address = #{fromAddress},</if>
+            <if test="toAddress != null">to_address = #{toAddress},</if>
+            <if test="tradeCount != null">trade_count = #{tradeCount},</if>
+            <if test="sumWithdrawMoney != null">sum_withdraw_money = #{sumWithdrawMoney},</if>
+            <if test="chainId != null">chain_id = #{chainId},</if>
+            <if test="chainName != null">chain_name = #{chainName},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMemberWithdrawInfoById" parameterType="Long">
+        delete from member_withdraw_info where id = #{id}
+    </delete>
+
+    <delete id="deleteMemberWithdrawInfoByIds" parameterType="String">
+        delete from member_withdraw_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

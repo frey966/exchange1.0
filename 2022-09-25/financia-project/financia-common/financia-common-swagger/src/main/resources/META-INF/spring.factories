@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.financia.common.swagger.config.SwaggerAutoConfiguration,\
+  com.financia.common.swagger.config.SwaggerWebConfiguration,\
+  com.financia.common.swagger.config.SwaggerBeanPostProcessor

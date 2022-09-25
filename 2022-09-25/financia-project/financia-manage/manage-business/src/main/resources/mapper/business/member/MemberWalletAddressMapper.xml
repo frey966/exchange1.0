@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.business.member.mapper.MemberWalletAddressMapper">
+
+    <resultMap type="com.financia.exchange.MemberWalletAddress" id="MemberWalletAddressResult">
+        <result property="id"    column="id"    />
+        <result property="memberId"    column="member_id"    />
+        <result property="address"    column="address"    />
+        <result property="privateKey"    column="private_key"    />
+        <result property="tradeCount"    column="trade_count"    />
+        <result property="sumRechargeMoney"    column="sum_recharge_money"    />
+        <result property="chainId"    column="chain_id"    />
+        <result property="chainName"    column="chain_name"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectMemberWalletAddressVo">
+        select id, member_id, address, private_key, trade_count, sum_recharge_money, chain_id, chain_name, update_time, create_time, status from member_wallet_address
+    </sql>
+
+    <select id="selectMemberWalletAddressList" parameterType="com.financia.exchange.MemberWalletAddress" resultMap="MemberWalletAddressResult">
+        <include refid="selectMemberWalletAddressVo"/>
+        <where>
+            <if test="memberId != null "> and member_id = #{memberId}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="privateKey != null  and privateKey != ''"> and private_key = #{privateKey}</if>
+            <if test="tradeCount != null "> and trade_count = #{tradeCount}</if>
+            <if test="sumRechargeMoney != null "> and sum_recharge_money = #{sumRechargeMoney}</if>
+            <if test="chainId != null "> and chain_id = #{chainId}</if>
+            <if test="chainName != null  and chainName != ''"> and chain_name like concat('%', #{chainName}, '%')</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectMemberWalletAddressById" parameterType="Long" resultMap="MemberWalletAddressResult">
+        <include refid="selectMemberWalletAddressVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertMemberWalletAddress" parameterType="com.financia.exchange.MemberWalletAddress" useGeneratedKeys="true" keyProperty="id">
+        insert into member_wallet_address
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="memberId != null">member_id,</if>
+            <if test="address != null and address != ''">address,</if>
+            <if test="privateKey != null and privateKey != ''">private_key,</if>
+            <if test="tradeCount != null">trade_count,</if>
+            <if test="sumRechargeMoney != null">sum_recharge_money,</if>
+            <if test="chainId != null">chain_id,</if>
+            <if test="chainName != null">chain_name,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="status != null">status,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="memberId != null">#{memberId},</if>
+            <if test="address != null and address != ''">#{address},</if>
+            <if test="privateKey != null and privateKey != ''">#{privateKey},</if>
+            <if test="tradeCount != null">#{tradeCount},</if>
+            <if test="sumRechargeMoney != null">#{sumRechargeMoney},</if>
+            <if test="chainId != null">#{chainId},</if>
+            <if test="chainName != null">#{chainName},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="status != null">#{status},</if>
+        </trim>
+    </insert>
+
+    <update id="updateMemberWalletAddress" parameterType="com.financia.exchange.MemberWalletAddress">
+        update member_wallet_address
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="memberId != null">member_id = #{memberId},</if>
+            <if test="address != null and address != ''">address = #{address},</if>
+            <if test="privateKey != null and privateKey != ''">private_key = #{privateKey},</if>
+            <if test="tradeCount != null">trade_count = #{tradeCount},</if>
+            <if test="sumRechargeMoney != null">sum_recharge_money = #{sumRechargeMoney},</if>
+            <if test="chainId != null">chain_id = #{chainId},</if>
+            <if test="chainName != null">chain_name = #{chainName},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMemberWalletAddressById" parameterType="Long">
+        delete from member_wallet_address where id = #{id}
+    </delete>
+
+    <delete id="deleteMemberWalletAddressByIds" parameterType="String">
+        delete from member_wallet_address where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

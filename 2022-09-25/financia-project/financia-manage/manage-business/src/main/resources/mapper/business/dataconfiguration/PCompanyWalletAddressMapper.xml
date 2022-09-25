@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.business.dataconfiguration.mapper.PCompanyWalletAddressMapper">
+    
+    <resultMap type="com.financia.common.PCompanyWalletAddress" id="PCompanyWalletAddressResult">
+        <result property="id"    column="id"    />
+        <result property="address"    column="address"    />
+        <result property="privateKey"    column="private_key"    />
+        <result property="amount"    column="amount"    />
+        <result property="energyValue"    column="energy_value"    />
+        <result property="handlingFee"    column="handling_fee"    />
+        <result property="chainId"    column="chain_id"    />
+        <result property="withdrowAmount"    column="withdrow_amount"    />
+        <result property="chainName"    column="chain_name"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectPCompanyWalletAddressVo">
+        select id, address, private_key, amount, energy_value, handling_fee, chain_id, withdrow_amount, chain_name, update_time, create_time, status from p_company_wallet_address
+    </sql>
+
+    <select id="selectPCompanyWalletAddressList" parameterType="com.financia.common.PCompanyWalletAddress" resultMap="PCompanyWalletAddressResult">
+        <include refid="selectPCompanyWalletAddressVo"/>
+        <where>  
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="privateKey != null  and privateKey != ''"> and private_key = #{privateKey}</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="energyValue != null "> and energy_value = #{energyValue}</if>
+            <if test="handlingFee != null "> and handling_fee = #{handlingFee}</if>
+            <if test="chainId != null "> and chain_id = #{chainId}</if>
+            <if test="withdrowAmount != null "> and withdrow_amount = #{withdrowAmount}</if>
+            <if test="chainName != null  and chainName != ''"> and chain_name like concat('%', #{chainName}, '%')</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectPCompanyWalletAddressById" parameterType="Long" resultMap="PCompanyWalletAddressResult">
+        <include refid="selectPCompanyWalletAddressVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPCompanyWalletAddress" parameterType="com.financia.common.PCompanyWalletAddress" useGeneratedKeys="true" keyProperty="id">
+        insert into p_company_wallet_address
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="address != null and address != ''">address,</if>
+            <if test="privateKey != null and privateKey != ''">private_key,</if>
+            <if test="amount != null">amount,</if>
+            <if test="energyValue != null">energy_value,</if>
+            <if test="handlingFee != null">handling_fee,</if>
+            <if test="chainId != null">chain_id,</if>
+            <if test="withdrowAmount != null">withdrow_amount,</if>
+            <if test="chainName != null">chain_name,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="address != null and address != ''">#{address},</if>
+            <if test="privateKey != null and privateKey != ''">#{privateKey},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="energyValue != null">#{energyValue},</if>
+            <if test="handlingFee != null">#{handlingFee},</if>
+            <if test="chainId != null">#{chainId},</if>
+            <if test="withdrowAmount != null">#{withdrowAmount},</if>
+            <if test="chainName != null">#{chainName},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePCompanyWalletAddress" parameterType="com.financia.common.PCompanyWalletAddress">
+        update p_company_wallet_address
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="address != null and address != ''">address = #{address},</if>
+            <if test="privateKey != null and privateKey != ''">private_key = #{privateKey},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="energyValue != null">energy_value = #{energyValue},</if>
+            <if test="handlingFee != null">handling_fee = #{handlingFee},</if>
+            <if test="chainId != null">chain_id = #{chainId},</if>
+            <if test="withdrowAmount != null">withdrow_amount = #{withdrowAmount},</if>
+            <if test="chainName != null">chain_name = #{chainName},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePCompanyWalletAddressById" parameterType="Long">
+        delete from p_company_wallet_address where id = #{id}
+    </delete>
+
+    <delete id="deletePCompanyWalletAddressByIds" parameterType="String">
+        delete from p_company_wallet_address where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

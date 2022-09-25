@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.conversion.exchange.mapper.PConversionRateServiceMapper">
+
+    <resultMap type="com.financia.exchange.PConversionRate" id="PConversionRateResult">
+        <result property="id"    column="id"    />
+        <result property="currencySymbol"    column="currency_symbol"    />
+        <result property="currencyName"    column="currency_name"    />
+        <result property="baseCurrency"    column="base_currency"    />
+        <result property="conversionRate"    column="conversion_rate"    />
+        <result property="currencyPath"    column="currency_path"    />
+        <result property="active"    column="active"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="currencyId"    column="currency_id"    />
+        <result property="sort"    column="sort"    />
+    </resultMap>
+
+    <sql id="selectPConversionRateVo">
+        select id, currency_symbol, currency_name, base_currency, conversion_rate, currency_path, active, create_time, update_time,currency_id,sort from p_conversion_rate
+    </sql>
+
+    <select id="selectPconversionRate"  resultMap="PConversionRateResult">
+        <include refid="selectPConversionRateVo"/>
+        <where>
+            <if test="currencySymbol != null  and currencySymbol != ''"> and currency_symbol like concat('%', #{currencySymbol}, '%')</if>
+            <if test="currencyName != null  and currencyName != ''"> and currency_name like concat('%', #{currencyName}, '%')</if>
+            <if test="baseCurrency != null  and baseCurrency != ''"> and base_currency like concat('%', #{baseCurrency}, '%')</if>
+            <if test="conversionRate != null "> and conversion_rate like concat('%', #{conversionRate}, '%')</if>
+            <if test="active != null  and active != ''"> and active = #{active}</if>
+            <if test="currencyId != null  and currencyId != ''"> and currency_id = #{currencyId}</if>
+            <if test="sort != null  and sort != ''"> and sort = #{sort}</if>
+            and active = 1
+        </where>
+    </select>
+
+
+    <resultMap type="com.financia.exchange.PNationalCurrency" id="PNationalCurrencyResult">
+        <result property="id"    column="id"    />
+        <result property="exchangeCoinName"    column="exchange_coin_name"    />
+        <result property="exchangeCoinZhName"    column="exchange_coin_zh_name"    />
+        <result property="exchangeCoinEnName"    column="exchange_coin_en_name"    />
+        <result property="exchangeCoinPcLogo"    column="exchange_coin_pc_logo"    />
+        <result property="exchangeCoinAppLogo"    column="exchange_coin_app_logo"    />
+        <result property="ranking"    column="ranking"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="status"    column="status"    />
+        <result property="conversionRate"    column="conversion_rate"    />
+        <result property="pair"    column="pair"    />
+        <result property="pairName"    column="pairName"    />
+        <result property="mcoid"    column="mcoid"    />
+        <result property="symbols"    column="symbols"    />
+        <result property="money"    column="money"    />
+    </resultMap>
+
+    <sql id="selectPNationalCurrencyVo">
+        select pnc.*,pcr.conversion_rate
+        <if test="memberId != null  and memberId != ''">
+            ,mwnc.money
+        </if>
+        from p_national_currency pnc
+        left join p_conversion_rate pcr on pnc.exchange_coin_name=pcr.currency_symbol
+        <if test="memberId != null  and memberId != ''">
+            left join member_wallet_national_currency mwnc on pnc.id=mwnc.coin_id and mwnc.member_id=#{memberId}
+        </if>
+    </sql>
+    <!-- 查询汇兑交易对列表   -->
+    <sql id="selectPNationalCurrencyPairVo">
+    select pnc.*,pcr.conversion_rate,CONCAT("USDT",'/',pnc.exchange_coin_name) as pair,
+            CONCAT("泰达币",'/',pnc.exchange_coin_zh_name) as pairName,mco.id as mcoid
+    from p_national_currency pnc
+    left join p_conversion_rate pcr on pnc.exchange_coin_name=pcr.currency_symbol
+    left join member_exchange_currency_favorite mco on mco.currency_id=pnc.id and mco.member_id=#{memberId}
+    </sql>
+
+
+    <select id="selectPNationalCurrencyList" parameterType="com.financia.exchange.PNationalCurrency" resultMap="PNationalCurrencyResult">
+        <include refid="selectPNationalCurrencyVo"/>
+        <where>
+            <if test="exchangeCoinName != null  and exchangeCoinName != ''"> and exchange_coin_name like concat('%', #{exchangeCoinName}, '%')</if>
+            <if test="exchangeCoinZhName != null  and exchangeCoinZhName != ''"> and exchange_coin_zh_name like concat('%', #{exchangeCoinZhName}, '%')</if>
+            <if test="exchangeCoinEnName != null  and exchangeCoinEnName != ''"> and exchange_coin_en_name like concat('%', #{exchangeCoinEnName}, '%')</if>
+            <if test="ishot != null  and ishot != ''"> and ishot = #{ishot}</if>
+            and pnc.status = 1
+        </where>
+    </select>
+
+    <select id="selectPNationalCurrencyPair" parameterType="com.financia.exchange.PNationalCurrency" resultMap="PNationalCurrencyResult">
+        <include refid="selectPNationalCurrencyPairVo"/>
+        <where>
+            <if test="exchangeCoinName != null  and exchangeCoinName != ''"> and exchange_coin_name like concat('%', #{exchangeCoinName}, '%')</if>
+            <if test="exchangeCoinZhName != null  and exchangeCoinZhName != ''"> and exchange_coin_zh_name like concat('%', #{exchangeCoinZhName}, '%')</if>
+            <if test="exchangeCoinEnName != null  and exchangeCoinEnName != ''"> and exchange_coin_en_name like concat('%', #{exchangeCoinEnName}, '%')</if>
+            <if test="ishot != null  and ishot != ''"> and ishot = #{ishot}</if>
+            <if test="mcoid != null  and mcoid != ''"> and mco.id >0</if>
+            and status = 1
+        </where>
+    </select>
+
+</mapper>

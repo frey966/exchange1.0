@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.common.mapper.PContactUsMapper">
+    
+    <resultMap type="com.financia.common.PContactUs" id="PContactUsResult">
+        <result property="id"    column="id"    />
+        <result property="kefuLink"    column="kefu_link"    />
+        <result property="telegramLink"    column="telegram_link"    />
+        <result property="telegramChannel"    column="telegram_channel"    />
+        <result property="active"    column="active"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectPContactUsVo">
+        select id, kefu_link, telegram_link, telegram_channel, active, create_time, update_time from p_contact_us
+    </sql>
+
+    <select id="selectPContactUsList" parameterType="com.financia.common.PContactUs" resultMap="PContactUsResult">
+        <include refid="selectPContactUsVo"/>
+        <where>  
+            <if test="kefuLink != null  and kefuLink != ''"> and kefu_link like concat('%', #{kefuLink}, '%')</if>
+            <if test="telegramLink != null  and telegramLink != ''"> and telegram_link like concat('%', #{telegramLink}, '%')</if>
+            <if test="telegramChannel != null  and telegramChannel != ''"> and telegram_channel like concat('%', #{telegramChannel}, '%')</if>
+            <if test="active != null  and active != ''"> and active = #{active}</if>
+        </where>
+    </select>
+    
+    <select id="selectPContactUsById" parameterType="Long" resultMap="PContactUsResult">
+        <include refid="selectPContactUsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPContactUs" parameterType="com.financia.common.PContactUs" useGeneratedKeys="true" keyProperty="id">
+        insert into p_contact_us
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="kefuLink != null">kefu_link,</if>
+            <if test="telegramLink != null">telegram_link,</if>
+            <if test="telegramChannel != null">telegram_channel,</if>
+            <if test="active != null">active,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="kefuLink != null">#{kefuLink},</if>
+            <if test="telegramLink != null">#{telegramLink},</if>
+            <if test="telegramChannel != null">#{telegramChannel},</if>
+            <if test="active != null">#{active},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePContactUs" parameterType="com.financia.common.PContactUs">
+        update p_contact_us
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="kefuLink != null">kefu_link = #{kefuLink},</if>
+            <if test="telegramLink != null">telegram_link = #{telegramLink},</if>
+            <if test="telegramChannel != null">telegram_channel = #{telegramChannel},</if>
+            <if test="active != null">active = #{active},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePContactUsById" parameterType="Long">
+        delete from p_contact_us where id = #{id}
+    </delete>
+
+    <delete id="deletePContactUsByIds" parameterType="String">
+        delete from p_contact_us where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

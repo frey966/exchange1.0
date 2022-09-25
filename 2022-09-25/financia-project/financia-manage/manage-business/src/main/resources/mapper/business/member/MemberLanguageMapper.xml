@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.business.member.mapper.MemberLanguageMapper">
+    
+    <resultMap type="com.financia.business.MemberLanguage" id="MemberLanguageResult">
+        <result property="id"    column="id"    />
+        <result property="languageType"    column="language_type"    />
+        <result property="language"    column="language"    />
+        <result property="imgurl"    column="imgurl"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="lablestr"    column="lablestr"    />
+        <result property="active"    column="active"    />
+    </resultMap>
+
+    <sql id="selectMemberLanguageVo">
+        select id, language_type, language, imgurl,
+        create_time, update_time,lablestr,active
+        from member_language
+
+    </sql>
+
+    <select id="selectMemberLanguageList" parameterType="com.financia.business.MemberLanguage" resultMap="MemberLanguageResult">
+        <include refid="selectMemberLanguageVo"/>
+        <where>  
+            <if test="languageType != null  and languageType != ''"> and language_type like concat('%', #{languageType}, '%')</if>
+            <if test="language != null  and language != ''"> and language like concat('%', #{language}, '%')</if>
+            <if test="imgurl != null  and imgurl != ''"> and imgurl = #{imgurl}</if>
+        </where>
+    </select>
+    
+    <select id="selectMemberLanguageById" parameterType="Long" resultMap="MemberLanguageResult">
+        <include refid="selectMemberLanguageVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertMemberLanguage" parameterType="com.financia.business.MemberLanguage" useGeneratedKeys="true" keyProperty="id">
+        insert into member_language
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="languageType != null">language_type,</if>
+            <if test="language != null">language,</if>
+            <if test="imgurl != null">imgurl,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="lablestr != null">lablestr,</if>
+            <if test="active != null">active,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="languageType != null">#{languageType},</if>
+            <if test="language != null">#{language},</if>
+            <if test="imgurl != null">#{imgurl},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="lablestr != null">#{lablestr},</if>
+            <if test="active != null">#{active},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMemberLanguage" parameterType="com.financia.business.MemberLanguage">
+        update member_language
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="languageType != null">language_type = #{languageType},</if>
+            <if test="language != null">language = #{language},</if>
+            <if test="imgurl != null">imgurl = #{imgurl},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="lablestr != null">lablestr = #{lablestr},</if>
+            <if test="active != null">active = #{active},</if>
+            update_time = CURRENT_TIMESTAMP ,
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMemberLanguageById" parameterType="Long">
+        delete from member_language where id = #{id}
+    </delete>
+
+    <delete id="deleteMemberLanguageByIds" parameterType="String">
+        delete from member_language where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

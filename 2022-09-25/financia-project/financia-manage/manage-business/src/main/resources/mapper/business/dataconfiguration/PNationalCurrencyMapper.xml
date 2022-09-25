@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.business.dataconfiguration.mapper.PNationalCurrencyMapper">
+    
+    <resultMap type="com.financia.exchange.PNationalCurrency" id="PNationalCurrencyResult">
+        <result property="id"    column="id"    />
+        <result property="exchangeCoinName"    column="exchange_coin_name"    />
+        <result property="exchangeCoinZhName"    column="exchange_coin_zh_name"    />
+        <result property="exchangeCoinEnName"    column="exchange_coin_en_name"    />
+        <result property="exchangeCoinPcLogo"    column="exchange_coin_pc_logo"    />
+        <result property="exchangeCoinAppLogo"    column="exchange_coin_app_logo"    />
+        <result property="ranking"    column="ranking"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="status"    column="status"    />
+        <result property="conversionRate"    column="conversion_rate"    />
+    </resultMap>
+
+    <sql id="selectPNationalCurrencyVo">
+        select pnc.id,pnc.exchange_coin_name,pnc.exchange_coin_zh_name,pnc.exchange_coin_en_name,pnc.exchange_coin_pc_logo,pnc.exchange_coin_app_logo,
+        pnc.ranking,pnc.create_time,pnc.status,pnc.status,
+        pcr.conversion_rate,pcr.update_time
+        from p_national_currency pnc
+        left join p_conversion_rate pcr on pnc.exchange_coin_name=pcr.currency_symbol
+    </sql>
+
+    <select id="selectPNationalCurrencyList" parameterType="com.financia.exchange.PNationalCurrency" resultMap="PNationalCurrencyResult">
+        <include refid="selectPNationalCurrencyVo"/>
+        <where>  
+            <if test="exchangeCoinName != null  and exchangeCoinName != ''"> and exchange_coin_name like concat('%', #{exchangeCoinName}, '%')</if>
+            <if test="exchangeCoinZhName != null  and exchangeCoinZhName != ''"> and exchange_coin_zh_name like concat('%', #{exchangeCoinZhName}, '%')</if>
+            <if test="exchangeCoinEnName != null  and exchangeCoinEnName != ''"> and exchange_coin_en_name like concat('%', #{exchangeCoinEnName}, '%')</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectPNationalCurrencyById" parameterType="Long" resultMap="PNationalCurrencyResult">
+        <include refid="selectPNationalCurrencyVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPNationalCurrency" parameterType="com.financia.exchange.PNationalCurrency" useGeneratedKeys="true" keyProperty="id">
+        insert into p_national_currency
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="exchangeCoinName != null and exchangeCoinName != ''">exchange_coin_name,</if>
+            <if test="exchangeCoinZhName != null and exchangeCoinZhName != ''">exchange_coin_zh_name,</if>
+            <if test="exchangeCoinEnName != null and exchangeCoinEnName != ''">exchange_coin_en_name,</if>
+            <if test="exchangeCoinPcLogo != null and exchangeCoinPcLogo != ''">exchange_coin_pc_logo,</if>
+            <if test="exchangeCoinAppLogo != null">exchange_coin_app_logo,</if>
+            <if test="ranking != null">ranking,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="exchangeCoinName != null and exchangeCoinName != ''">#{exchangeCoinName},</if>
+            <if test="exchangeCoinZhName != null and exchangeCoinZhName != ''">#{exchangeCoinZhName},</if>
+            <if test="exchangeCoinEnName != null and exchangeCoinEnName != ''">#{exchangeCoinEnName},</if>
+            <if test="exchangeCoinPcLogo != null and exchangeCoinPcLogo != ''">#{exchangeCoinPcLogo},</if>
+            <if test="exchangeCoinAppLogo != null">#{exchangeCoinAppLogo},</if>
+            <if test="ranking != null">#{ranking},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePNationalCurrency" parameterType="com.financia.exchange.PNationalCurrency">
+        update p_national_currency
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="exchangeCoinName != null and exchangeCoinName != ''">exchange_coin_name = #{exchangeCoinName},</if>
+            <if test="exchangeCoinZhName != null and exchangeCoinZhName != ''">exchange_coin_zh_name = #{exchangeCoinZhName},</if>
+            <if test="exchangeCoinEnName != null and exchangeCoinEnName != ''">exchange_coin_en_name = #{exchangeCoinEnName},</if>
+            <if test="exchangeCoinPcLogo != null and exchangeCoinPcLogo != ''">exchange_coin_pc_logo = #{exchangeCoinPcLogo},</if>
+            <if test="exchangeCoinAppLogo != null">exchange_coin_app_logo = #{exchangeCoinAppLogo},</if>
+            <if test="ranking != null">ranking = #{ranking},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="status != null">status = #{status},</if>
+            update_time = date_format(now(),'%Y-%m-%d %H:%i:%s')
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePNationalCurrencyById" parameterType="Long">
+        delete from p_national_currency where id = #{id}
+    </delete>
+
+    <delete id="deletePNationalCurrencyByIds" parameterType="String">
+        delete from p_national_currency where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

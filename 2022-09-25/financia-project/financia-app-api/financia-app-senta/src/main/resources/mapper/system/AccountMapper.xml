@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.system.mapper.AccountMapper">
+
+    <resultMap type="com.financia.system.domain.Account" id="AccountResult">
+        <id     property="id"              column="id"                />
+        <result property="balance"         column="balance"           />
+        <result property="lastUpdateTime"  column="last_update_time"  />
+    </resultMap>
+
+    <select id="selectById" parameterType="com.financia.system.domain.Account" resultMap="AccountResult">
+        select id, balance, last_update_time
+        from account where id = #{userId}
+    </select>
+
+    <update id="updateById" parameterType="com.financia.system.domain.Account">
+        update account set balance = #{balance}, last_update_time = sysdate() where id = #{id}
+    </update>
+
+    
+</mapper>

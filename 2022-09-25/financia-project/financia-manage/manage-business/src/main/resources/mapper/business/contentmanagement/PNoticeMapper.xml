@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.business.contentmanagement.mapper.PNoticeMapper">
+    
+    <resultMap type="com.financia.exchange.PNotice" id="PNoticeResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="details"    column="details"    />
+        <result property="type"    column="type"    />
+        <result property="language"    column="language"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectPNoticeVo">
+        select id, title, details, type, language, create_time, update_time,status from p_notice
+    </sql>
+
+    <select id="selectPNoticeList" parameterType="com.financia.exchange.PNotice" resultMap="PNoticeResult">
+        <include refid="selectPNoticeVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="details != null  and details != ''"> and details = #{details}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="language != null  and language != ''"> and language = #{language}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectPNoticeById" parameterType="Long" resultMap="PNoticeResult">
+        <include refid="selectPNoticeVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPNotice" parameterType="com.financia.exchange.PNotice" useGeneratedKeys="true" keyProperty="id">
+        insert into p_notice
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">title,</if>
+            <if test="details != null and details != ''">details,</if>
+            <if test="type != null and type != ''">type,</if>
+            <if test="language != null and language != ''">language,</if>
+            <if test="createTime != null and createTime != ''">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="details != null and details != ''">#{details},</if>
+            <if test="type != null and type != ''">#{type},</if>
+            <if test="language != null and language != ''">#{language},</if>
+            <if test="createTime != null and createTime != ''">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePNotice" parameterType="com.financia.exchange.PNotice">
+        update p_notice
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="details != null and details != ''">details = #{details},</if>
+            <if test="type != null and type != ''">type = #{type},</if>
+            <if test="language != null and language != ''">language = #{language},</if>
+            <if test="createTime != null and createTime != ''">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePNoticeById" parameterType="Long">
+        delete from p_notice where id = #{id}
+    </delete>
+
+    <delete id="deletePNoticeByIds" parameterType="String">
+        delete from p_notice where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

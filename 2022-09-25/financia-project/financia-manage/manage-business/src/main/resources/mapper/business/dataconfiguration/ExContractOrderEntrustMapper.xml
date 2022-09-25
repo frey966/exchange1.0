@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.financia.business.dataconfiguration.mapper.ExContractOrderEntrustMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.financia.swap.ExContractOrderEntrust" id="exContractOrderEntrustMap">
+        <result property="id" column="id"/>
+        <result property="baseSymbol" column="base_symbol"/>
+        <result property="coinSymbol" column="coin_symbol"/>
+        <result property="memberId" column="member_id"/>
+        <result property="contractId" column="contract_id"/>
+        <result property="walletId" column="wallet_id"/>
+        <result property="contractOrderEntrustId" column="contract_order_entrust_id"/>
+        <result property="currentPrice" column="current_price"/>
+        <result property="direction" column="direction"/>
+        <result property="entrustPrice" column="entrust_price"/>
+        <result property="entrustType" column="entrust_type"/>
+        <result property="isBlast" column="is_blast"/>
+        <result property="isFromSpot" column="is_from_spot"/>
+        <result property="closeFee" column="close_fee"/>
+        <result property="openFee" column="open_fee"/>
+        <result property="patterns" column="patterns"/>
+        <result property="principalAmount" column="principal_amount"/>
+        <result property="principalUnit" column="principal_unit"/>
+        <result property="profitAndLoss" column="profit_and_loss"/>
+        <result property="shareNumber" column="share_number"/>
+        <result property="symbol" column="symbol"/>
+        <result property="tradedPrice" column="traded_price"/>
+        <result property="tradedVolume" column="traded_volume"/>
+        <result property="triggerPrice" column="trigger_price"/>
+        <result property="triggeringTime" column="triggering_time"/>
+        <result property="type" column="type"/>
+        <result property="volume" column="volume"/>
+        <result property="value" column="value"/>
+        <result property="stopProfitPrice" column="stop_profit_price"/>
+        <result property="stopLossPrice" column="stop_loss_price"/>
+        <result property="closeOrderType" column="close_order_type"/>
+        <result property="leverage" column="leverage"/>
+        <result property="avaPrice" column="ava_price"/>
+        <result property="backAsset" column="back_asset"/>
+        <result property="forceClosePrice" column="force_close_price"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+
+</mapper>

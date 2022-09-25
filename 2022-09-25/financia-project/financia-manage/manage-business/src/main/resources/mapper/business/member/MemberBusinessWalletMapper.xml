@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.business.member.mapper.MemberBusinessWalletMapper">
+    
+    <resultMap type="com.financia.exchange.MemberBusinessWallet" id="MemberBusinessWalletResult">
+        <result property="id"    column="id"    />
+        <result property="memberId"    column="member_id"    />
+        <result property="money"    column="money"    />
+        <result property="freezeMoney"    column="freeze_money"    />
+        <result property="type"    column="type"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectMemberBusinessWalletVo">
+        select id, member_id, money, freeze_money, type, create_time, status from member_business_wallet
+    </sql>
+
+    <select id="selectMemberBusinessWalletList" parameterType="com.financia.exchange.MemberBusinessWallet" resultMap="MemberBusinessWalletResult">
+        <include refid="selectMemberBusinessWalletVo"/>
+        <where>  
+            <if test="memberId != null "> and member_id = #{memberId}</if>
+            <if test="type != null "> and type = #{type}</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectMemberBusinessWalletById" parameterType="Long" resultMap="MemberBusinessWalletResult">
+        <include refid="selectMemberBusinessWalletVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertMemberBusinessWallet" parameterType="com.financia.exchange.MemberBusinessWallet" useGeneratedKeys="true" keyProperty="id">
+        insert into member_business_wallet
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="memberId != null">member_id,</if>
+            <if test="money != null">money,</if>
+            <if test="freezeMoney != null">freeze_money,</if>
+            <if test="type != null">type,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="memberId != null">#{memberId},</if>
+            <if test="money != null">#{money},</if>
+            <if test="freezeMoney != null">#{freezeMoney},</if>
+            <if test="type != null">#{type},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMemberBusinessWallet" parameterType="com.financia.exchange.MemberBusinessWallet">
+        update member_business_wallet
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="memberId != null">member_id = #{memberId},</if>
+            <if test="money != null">money = #{money},</if>
+            <if test="freezeMoney != null">freeze_money = #{freezeMoney},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMemberBusinessWalletById" parameterType="Long">
+        delete from member_business_wallet where id = #{id}
+    </delete>
+
+    <delete id="deleteMemberBusinessWalletByIds" parameterType="String">
+        delete from member_business_wallet where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
