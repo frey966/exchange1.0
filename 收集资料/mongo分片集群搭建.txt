@@ -112,7 +112,7 @@ rs.initiate(
 
 查看节点状态
 rs.status()
--------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------
 ./mongo 127.0.0.1 --port 27020
 rs.initiate(
   {
@@ -127,7 +127,7 @@ rs.initiate(
 
 查看节点状态
 rs.status()
-------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------
 ./mongo 127.0.0.1 --port 27021
 rs.initiate(
   {
@@ -183,117 +183,10 @@ sh.status()
 目前配置服务、路由服务、分片服务、副本集服务都已经串联起来了，但我们的目的是希望插入数据，数据能够自动分片。连接在mongos上，准备让指定的数据库、指定的集合分片生效。
 #连接任意一台mongos节点
 ./mongo 127.0.0.1 --port 25786
------------------------------------------------------------------------------------------------------------------------------------------
-数据操作
-在案例中，创建appuser用户、为数据库实例df_test启动分片。
-
-1.初始化用户
-use admin
-db.createUser({user:'admin',pwd:'admin@879',roles:['clusterAdmin','dbAdminAnyDatabase','userAdminAnyDatabase','readWriteAnyDatabase']})
-db.auth("admin","admin@879")
-#查看分片情况
-db.stats();
-查看集群状态
-sh.status()
-# 查看用户 在 admin库
-db.system.users.find().pretty()
-#授权库账号
---------------------------------------------------------------------------------------------------
-use testdb
-sh.enableSharding("testdb") #开启分片
-#为集合启用分片
-为order集合设置分片规则
-sh.shardCollection("testdb.order", {"_id": "hashed" })
-db.createUser({user: "testdb", pwd: "testdb56", roles: [{ role: "dbOwner", db: "testdb" }]})
-db.auth("testdb","testdb56")  # 集群可以不用执行，执行会提示错误
-show collections
-
-for (i = 1; i <= 100000; i=i+1){
-    db.order.insert({'price': 1})
-}
-#查看分片情况
-db.order.stats();
-db.stats();
-#查看插入的数据量
-db.order.find().count()
------------------------------------------------------------------------------------------------------------------------------------
-use exchange-dev2
-db.createUser({user: "exchangedev2", pwd: "exchangedev33", roles: [{ role: "dbOwner", db: "exchange-dev2"}]})
-db.auth("exchangedev2","exchangedev33")  # 集群可以
-sh.enableSharding("exchange-dev2") #开启分片
-创建集合userid，为其执行分片初始化。
-sh.shardCollection("exchange-dev2.usertest1",{"user_id": "hashed" })
-for(var i=1;i<1000000;i++) db.usertest1.insert({user_id:i,username:"HSJ"+i,city:"tianjing"})
-show collections
-db.usertest1.find().count();
-db.usertest1.stats();
-
-
-use mongotest1
-db.createUser({user: "mongotest123", pwd: "mongotest56", roles: [{ role: "dbOwner", db: "mongotest1" }]})
-db.auth("mongotest123","mongotest56")  # 集群可以不用执行，执行会提示错误
-sh.enableSharding("mongotest1") #开启分片
-sh.shardCollection("mongotest1.usertest1",{"user_id": "hashed" })
-show collections
-db.lg_resume_datas.find().count();
-sh.shardCollection("mongotest1.users",{userid:1})
-
-
-
-use supreme
-db.createUser({
-	user: "sir",
-	pwd: "supreme",
-	roles: [{role: "readWrite", db: "supreme"}]
-})
-db.auth("sir","supreme")
-sh.enableSharding("supreme")
-sh.shardCollection("supreme.sir",{"name": "hashed"})
-
-
-
-
-for(var i=1;i<100000;i++) db.users.insert({userid:i,username:"HSJ"+i,city:"beijing"})
-exchangedev3.users.find().count();
-db.users.find().count();
-db.users.stats();
-
-db.stats()
-
-for(var i=1;i<1000000;i++) db.users.insert({userid:i,username:"HSJ"+i,city:"tianjing"})
-for(var i=1;i<100000;i++) db.users.insert({userid:i,username:"HSJ"+i,city:"shenzhen"})
-
---------------------------------------------------------------------------------------------
-
-db.printCollectionStats()
-db.printReplicationInfo()
-db.printSecondaryReplicationInfo()
-db.printShardingStatus()
-db.printSlaveReplicationInfo()
-----------------------------------------------------------------------------------------------
-#修改权限
-db.updateUser("usertest",{roles:[ {role:"read",db:"testDB"} ]})
-注：updateuser它是完全替换之前的值，如果要新增或添加roles而不是代替它 
-#修改密码
-db.updateUser("usertest",{pwd:"changepass1"})；
---------------------------------------------------------------------------------------------------------------------
-查看数据库
-use admin
-db.auth("admin","admin@879")
-show dbs
-方法删除当前数据库
-切换到 user 数据库，
-使用 db.dropDatabase()
-再次查看数据库列表
-show databases
-
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
 mongodb 生产开启 keyfile安全认证以及用户权限
 keyfile是mongodb副本集的实例之间的权限认证，如果keyfile文件内容不同，那么该实例添加到副本集的时候，会出现不可达的状态
 1、创建key文件: 注意，三个节点必须要用同一份keyfile，在一台机器生成，拷贝到另外两台，并且修改成 600 的文件属性
-
-
-
-
 
 openssl rand -base64 756 > /usr/tool/mongo/start/key1.file
 chmod 600 /data/mongodb/auth.keyfile
@@ -325,14 +218,115 @@ security:
 mongos 添加
 security:
   keyFile: /usr/tool/mongo/star/keyfile
-  
-  
-  关闭时，直接killall杀掉所有进程
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+数据操作
+在案例中，创建appuser用户、为数据库实例df_test启动分片。
+./mongo 127.0.0.1 --port 25786
+1.初始化用户
+use admin
+db.createUser({user:'admin',pwd:'admin@879',roles:['clusterAdmin','dbAdminAnyDatabase','userAdminAnyDatabase','readWriteAnyDatabase']})
+db.auth("admin","admin@879")
+#查看分片情况
+db.stats();
+查看集群状态
+sh.status()
+# 查看用户 在 admin库
+db.system.users.find().pretty()
+#授权库账号
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+use testdb2
+db.createUser({user: "testdb2", pwd: "testdb56", roles: [{ role: "dbOwner", db: "testdb2" }]})
+db.auth("testdb1","testdb56")  # 集群可以不用执行，执行会提示错误
+sh.enableSharding("testdb2") #开启分片
+#为集合启用分片
+为order集合设置分片规则
+sh.shardCollection("testdb2.order1", {"_id": "hashed" })
+sh.shardCollection("testdb2.order2", {"_id": "hashed" })
+show collections
+for(var i=1;i<100000;i++) db.order2.insert({username:"HSJ"+i,city:"shenzhen"})
 
+for (i = 1; i <= 100000; i=i+1){
+    db.order1.insert({'price': 1})
+}
+#查看分片情况
+db.order.stats();
+db.stats();
+#查看插入的数据量
+db.order.find().count()
+
+
+
+
+use exchange_dev
+db.createUser({user: "exchange_dev1", pwd: "exchange_dev321", roles: [{ role: "dbOwner", db: "exchange_dev" }]})
+db.auth("exchange_dev1","exchange_dev321")  # 集群可以不用执行，执行会提示错误
+sh.enableSharding("exchange_dev") #开启分片
+#为集合启用分片
+为order集合设置分片规则
+sh.shardCollection("exchange_dev.order1", {"_id": "hashed" })
+sh.shardCollection("exchange_dev.chuangzhang01", {"_id": "hashed" })
+
+show collections
+for(var i=1;i<1000;i++) db.order1.insert({username:"HSJ"+i,city:"shenzhen"})
+
+for (i = 1; i <= 100000; i=i+1){
+    db.order1.insert({'price': 1})
+}
+#查看分片情况
+db.chuangzhang01.stats();
+db.stats();
+#查看插入的数据量
+db.chuangzhang01.find().count()
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+use test-dev1
+db.createUser({user: "test-dev1", pwd: "test-dev123", roles: [{ role: "dbOwner", db: "test-dev1"}]})
+db.auth("test-dev1","test-dev123") #集群可以
+sh.enableSharding("test-dev1") #开启分片
+创建集合userid，为其执行分片初始化。
+sh.shardCollection("test-dev1.user3",{"_id": "hashed" })
+db.user2.find().count();
+for(var i=1;i<100000;i++) db.user2.insert({username:"HSJ"+i,city:"tianjing"})
+for(var i=1;i<100000;i++) db.usertest1.insert({user_id:i,username:"HSJ"+i,city:"tianjing"})
+show collections
+db.usertest1.find().count();
+db.user2.stats();
+db.stats();
+删除集合
+db.usertest1.drop()
+db.user2.drop()
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+use mongotest1
+db.createUser({user: "mongotest123", pwd: "mongotest56", roles: [{ role: "dbOwner", db: "mongotest1" }]})
+db.auth("mongotest123","mongotest56")  # 集群可以不用执行，执行会提示错误
+sh.enableSharding("mongotest1") #开启分片
+sh.shardCollection("mongotest1.usertest1",{"user_id": "hashed" })
+show collections
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+db.printCollectionStats()
+db.printReplicationInfo()
+db.printSecondaryReplicationInfo()
+db.printShardingStatus()
+db.printSlaveReplicationInfo()
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+#修改权限
+db.updateUser("usertest",{roles:[ {role:"read",db:"testDB"} ]})
+注：updateuser它是完全替换之前的值，如果要新增或添加roles而不是代替它 
+#修改密码
+db.updateUser("usertest",{pwd:"changepass1"})；
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+查看数据库
+use admin
+db.auth("admin","admin@879")
+show dbs
+方法删除当前数据库
+切换到 user 数据库，
+使用 db.dropDatabase()
+再次查看数据库列表
+show databases
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+关闭时，直接killall杀掉所有进程
 ps -ef|grep mongod
 ps -ef|grep mongo
 killall mongod
 killall mongo
 killall mongos
-
-209997
