@@ -1,0 +1,14 @@
+server:
+   port: 8086
+
+spring:
+   redis:
+    cluster:
+      nodes: 54.179.184.125:7001,54.179.184.125:7002,54.169.76.123:7003,54.169.76.123:7004,54.255.85.152:7005,54.255.85.152:7006
+      max-redirects: 3
+    password : chuanzhangredis
+    lettuce:
+         pool:
+          max-idle: 10
+          max-active: 10
+          min-idle: 0

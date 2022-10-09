@@ -1,0 +1,12 @@
+server:
+   port: 8091
+redis:
+  server:
+    pattern: cluster
+    nodes: 54.179.184.125:7001,54.179.184.125:7002,54.169.76.123:7003,54.169.76.123:7004,54.255.85.152:7005,54.255.85.152:7006
+    password: chuanzhangredis
+    maxIdle: 8
+    minIdle: 4
+    maxTotal: 8
+    maxWaitMillis: 6000
+    timeOut: 6000
