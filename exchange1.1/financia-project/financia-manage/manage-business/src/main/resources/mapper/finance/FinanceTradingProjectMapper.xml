@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.business.finance.mapper.FinanceTradingProjectMapper">
+
+    <resultMap type="com.financia.finance.FinanceTradingProject" id="FinanceTradingProjectResult">
+        <result property="financeId"    column="finance_id"    />
+        <result property="projectType"    column="project_type"    />
+        <result property="projectTypeName"    column="project_type_name"    />
+        <result property="imageUrl"    column="image_url"    />
+        <result property="financeProgress"    column="finance_progress"    />
+        <result property="financeZhName"    column="finance_zh_name"    />
+        <result property="financeEnName"    column="finance_en_name"    />
+        <result property="depositMinAmount"    column="deposit_min_amount"    />
+        <result property="depositSingleMaxAmount"    column="deposit_single_max_amount"    />
+        <result property="depositSingleMinAmount"    column="deposit_single_min_amount"    />
+        <result property="depositBeginTime"    column="deposit_begin_time"    />
+        <result property="depositEndTime"    column="deposit_end_time"    />
+        <result property="depositCloseDay"    column="deposit_close_day"    />
+        <result property="withdrawRule"    column="withdraw_rule"    />
+        <result property="incomeAmount"    column="income_amount"    />
+        <result property="incomeToAccount"    column="income_to_account"    />
+        <result property="incomeToAccountWay"    column="income_to_account_way"    />
+        <result property="incomeDailyInterest"    column="income_daily_interest"    />
+        <result property="profitCustomer"    column="profit_customer"    />
+        <result property="profitOperator"    column="profit_operator"    />
+        <result property="active"    column="active"    />
+        <result property="content"    column="content"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="showRate"    column="show_rate"    />
+        <result property="ishome"    column="ishome"    />
+        <result property="label"    column="label"    />
+    </resultMap>
+
+    <sql id="selectFinanceTradingProjectVo">
+        select finance_id, project_type, image_url,project_type_name,
+        finance_progress, finance_zh_name,show_rate,
+        finance_en_name, deposit_min_amount, deposit_single_max_amount,
+        deposit_begin_time, deposit_end_time, deposit_close_day, withdraw_rule,
+        income_amount, income_to_account, income_to_account_way, income_daily_interest,
+        profit_customer, profit_operator, active, content, create_time, update_time ,deposit_single_min_amount,ishome,label,withdraw_rule
+        from finance_trading_project
+    </sql>
+
+    <select id="selectFinanceTradingProjectList" parameterType="com.financia.finance.FinanceTradingProject" resultMap="FinanceTradingProjectResult">
+        <include refid="selectFinanceTradingProjectVo"/>
+        <where>
+            <if test="financeId != null "> and finance_id = #{financeId}</if>
+            <if test="projectType != null "> and project_type = #{projectType}</if>
+            <if test="financeZhName != null  and financeZhName != ''"> and finance_zh_name like concat('%', #{financeZhName}, '%')</if>
+            <if test="financeEnName != null  and financeEnName != ''"> and finance_en_name like concat('%', #{financeEnName}, '%')</if>
+            <if test="active != null "> and active = #{active}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectFinanceTradingProjectByFinanceId" parameterType="Long" resultMap="FinanceTradingProjectResult">
+        <include refid="selectFinanceTradingProjectVo"/>
+        where finance_id = #{financeId}
+    </select>
+
+    <insert id="insertFinanceTradingProject" parameterType="com.financia.finance.FinanceTradingProject">
+        insert into finance_trading_project
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="financeId != null">finance_id,</if>
+            <if test="projectType != null">project_type,</if>
+            <if test="imageUrl != null">image_url,</if>
+            <if test="financeProgress != null">finance_progress,</if>
+            <if test="financeZhName != null">finance_zh_name,</if>
+            <if test="financeEnName != null">finance_en_name,</if>
+            <if test="depositMinAmount != null">deposit_min_amount,</if>
+            <if test="depositSingleMaxAmount != null">deposit_single_max_amount,</if>
+            <if test="depositBeginTime != null">deposit_begin_time,</if>
+            <if test="depositEndTime != null">deposit_end_time,</if>
+            <if test="depositCloseDay != null">deposit_close_day,</if>
+            <if test="withdrawRule != null">withdraw_rule,</if>
+            <if test="projectTypeName != null">project_type_name,</if>
+            <if test="incomeAmount != null">income_amount,</if>
+            <if test="incomeToAccount != null">income_to_account,</if>
+            <if test="incomeToAccountWay != null">income_to_account_way,</if>
+            <if test="incomeDailyInterest != null">income_daily_interest,</if>
+            <if test="profitCustomer != null">profit_customer,</if>
+            <if test="profitOperator != null">profit_operator,</if>
+            <if test="active != null">active,</if>
+            <if test="content != null">content,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="depositSingleMinAmount != null">deposit_single_min_amount,</if>
+            <if test="ishome != null">ishome,</if>
+            <if test="label != null">label,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="financeId != null">#{financeId},</if>
+            <if test="projectType != null">#{projectType},</if>
+            <if test="imageUrl != null">#{imageUrl},</if>
+            <if test="financeProgress != null">#{financeProgress},</if>
+            <if test="financeZhName != null">#{financeZhName},</if>
+            <if test="financeEnName != null">#{financeEnName},</if>
+            <if test="depositMinAmount != null">#{depositMinAmount},</if>
+            <if test="depositSingleMaxAmount != null">#{depositSingleMaxAmount},</if>
+            <if test="depositBeginTime != null">DATE_FORMAT(#{depositBeginTime},'%Y-%m-%d %H:%i:%s'),</if>
+            <if test="depositEndTime != null">DATE_FORMAT(#{depositEndTime},'%Y-%m-%d %H:%i:%s'),</if>
+            <if test="depositCloseDay != null">#{depositCloseDay},</if>
+            <if test="withdrawRule != null">#{withdrawRule},</if>
+            <if test="projectTypeName != null">project_type_name,</if>
+            <if test="incomeAmount != null">#{incomeAmount},</if>
+            <if test="incomeToAccount != null">#{incomeToAccount},</if>
+            <if test="incomeToAccountWay != null">#{incomeToAccountWay},</if>
+            <if test="incomeDailyInterest != null">#{incomeDailyInterest},</if>
+            <if test="profitCustomer != null">#{profitCustomer},</if>
+            <if test="profitOperator != null">#{profitOperator},</if>
+            <if test="active != null">#{active},</if>
+            <if test="content != null">#{content},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="depositSingleMinAmount != null">#{depositSingleMinAmount},</if>
+            <if test="ishome != null">#{ishome},</if>
+            <if test="label != null">#{label},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFinanceTradingProject" parameterType="com.financia.finance.FinanceTradingProject">
+        update finance_trading_project
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectType != null">project_type = #{projectType},</if>
+            <if test="imageUrl != null">image_url = #{imageUrl},</if>
+            <if test="financeProgress != null">finance_progress = #{financeProgress},</if>
+            <if test="financeZhName != null">finance_zh_name = #{financeZhName},</if>
+            <if test="financeEnName != null">finance_en_name = #{financeEnName},</if>
+            <if test="depositMinAmount != null">deposit_min_amount = #{depositMinAmount},</if>
+            <if test="depositSingleMaxAmount != null">deposit_single_max_amount = #{depositSingleMaxAmount},</if>
+            <if test="depositBeginTime != null">deposit_begin_time = DATE_FORMAT(#{depositBeginTime},'%Y-%m-%d %H:%i:%s'),</if>
+            <if test="depositEndTime != null">deposit_end_time = DATE_FORMAT(#{depositEndTime},'%Y-%m-%d %H:%i:%s'),</if>
+            <if test="depositCloseDay != null">deposit_close_day = #{depositCloseDay},</if>
+            <if test="withdrawRule != null">withdraw_rule = #{withdrawRule},</if>
+            <if test="projectTypeName != null">project_type_name,</if>
+            <if test="incomeAmount != null">income_amount = #{incomeAmount},</if>
+            <if test="incomeToAccount != null">income_to_account = #{incomeToAccount},</if>
+            <if test="incomeToAccountWay != null">income_to_account_way = #{incomeToAccountWay},</if>
+            <if test="incomeDailyInterest != null">income_daily_interest = #{incomeDailyInterest},</if>
+            <if test="profitCustomer != null">profit_customer = #{profitCustomer},</if>
+            <if test="profitOperator != null">profit_operator = #{profitOperator},</if>
+            <if test="active != null">active = #{active},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="depositSingleMinAmount != null">deposit_single_min_amount = #{depositSingleMinAmount},</if>
+            <if test="ishome != null">ishome = #{ishome},</if>
+            <if test="label != null">label=#{label},</if>
+            update_time = date_format(now(),'%Y-%m-%d %H:%i:%s')
+        </trim>
+        where finance_id = #{financeId}
+    </update>
+
+    <delete id="deleteFinanceTradingProjectByFinanceId" parameterType="Long">
+        delete from finance_trading_project where finance_id = #{financeId}
+    </delete>
+
+    <delete id="deleteFinanceTradingProjectByFinanceIds" parameterType="String">
+        delete from finance_trading_project where finance_id in
+        <foreach item="financeId" collection="array" open="(" separator="," close=")">
+            #{financeId}
+        </foreach>
+    </delete>
+</mapper>

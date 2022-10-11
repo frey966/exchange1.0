@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.system.mapper.MemberBankMapper">
+    
+    <resultMap type="com.financia.business.MemberBank" id="MemberBankResult">
+        <result property="id"    column="id"    />
+        <result property="memberId"    column="member_id"    />
+        <result property="currencyId"    column="currency_id"    />
+        <result property="type"    column="type"    />
+        <result property="cardType"    column="card_type"    />
+        <result property="cardNumber"    column="card_number"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="username"    column="username"    />
+        <result property="exchangeCoinName"    column="exchange_coin_name"    />
+        <result property="cardName"    column="card_name"    />
+        <result property="exchangeCoinAppLogo"    column="exchange_coin_app_logo"    />
+        <result property="imgurl"    column="imgurl"    />
+        <result property="dictLabel"    column="dict_label"    />
+        <result property="bankName"    column="bank_name"    />
+    </resultMap>
+
+    <sql id="selectMemberBankVo">
+        select mb.*,m.username,p.exchange_coin_name,p.exchange_coin_app_logo,sdd.imgurl,sdd.dict_label
+        from member_bank mb
+        left join member m on m.id=mb.member_id
+        left join p_national_currency p on p.id=mb.currency_id
+        left join sys_dict_data sdd on sdd.dict_type='pay_bank_system' and sdd.dict_value=mb.card_type
+    </sql>
+
+    <select id="selectMemberBankList" parameterType="com.financia.business.MemberBank" resultMap="MemberBankResult">
+        <include refid="selectMemberBankVo"/>
+        <where>  
+            <if test="memberId != null "> and member_id = #{memberId}</if>
+            <if test="currencyId != null "> and currency_id = #{currencyId}</if>
+            <if test="cardType != null "> and card_type = #{cardType}</if>
+            <if test="cardNumber != null  and cardNumber != ''"> and card_number = #{cardNumber}</if>
+            <if test="username != null  and username != ''"> and m.username = #{username}</if>
+        </where>
+        order by mb.update_time desc
+    </select>
+    
+    <select id="selectMemberBankById" parameterType="Long" resultMap="MemberBankResult">
+        <include refid="selectMemberBankVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertMemberBank" parameterType="com.financia.business.MemberBank" useGeneratedKeys="true" keyProperty="id">
+        insert into member_bank
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="memberId != null">member_id,</if>
+            <if test="currencyId != null">currency_id,</if>
+            <if test="type != null">type,</if>
+            <if test="cardType != null">card_type,</if>
+            <if test="cardNumber != null and cardNumber != ''">card_number,</if>
+            <if test="createTime != null and createTime != ''">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="cardName != null">card_name,</if>
+            <if test="bankName != null">bank_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="memberId != null">#{memberId},</if>
+            <if test="currencyId != null">#{currencyId},</if>
+            <if test="type != null">#{type},</if>
+            <if test="cardType != null">#{cardType},</if>
+            <if test="cardNumber != null and cardNumber != ''">#{cardNumber},</if>
+            <if test="createTime != null and createTime != ''">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="cardName != null">#{cardName},</if>
+            <if test="bankName != null">#{bankName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMemberBank" parameterType="com.financia.business.MemberBank">
+        update member_bank
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="memberId != null">member_id = #{memberId},</if>
+            <if test="currencyId != null">currency_id = #{currencyId},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="cardType != null">card_type = #{cardType},</if>
+            <if test="cardNumber != null and cardNumber != ''">card_number = #{cardNumber},</if>
+            <if test="createTime != null and createTime != ''">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="cardName != null">card_name = #{cardName},</if>
+            <if test="bankName != null">bank_name = #{bankName},</if>
+            update_time = date_format(now(),'%Y-%m-%d %H:%i:%s')
+        </trim>
+
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMemberBankById" parameterType="Long">
+        delete from member_bank where id = #{id}
+    </delete>
+
+    <delete id="deleteMemberBankByIds" parameterType="String">
+        delete from member_bank where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.business.dataconfiguration.mapper.MemberSuperContractWalletMapper">
+    
+    <resultMap type="com.financia.exchange.MemberSuperContractWallet" id="MemberSuperContractWalletResult">
+        <result property="id"    column="id"    />
+        <result property="memberId"    column="member_id"    />
+        <result property="usdtBalance"    column="usdt_balance"    />
+        <result property="usdtBuyLeverage"    column="usdt_buy_leverage"    />
+        <result property="status"    column="status"    />
+        <result property="usdtBuyPosition"    column="usdt_buy_position"    />
+        <result property="usdtBuyPrice"    column="usdt_buy_price"    />
+        <result property="usdtBuyPrincipalAmount"    column="usdt_buy_principal_amount"    />
+        <result property="usdtLoss"    column="usdt_loss"    />
+        <result property="usdtProfit"    column="usdt_profit"    />
+        <result property="contractId"    column="contract_id"    />
+        <result property="entrustOrder"    column="entrust_order"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="forceClosePrice"    column="force_close_price"    />
+        <result property="openFee"    column="open_fee"    />
+        <result property="closeFee"    column="close_fee"    />
+        <result property="stopProfitPrice"    column="stop_profit_price"    />
+        <result property="stopLossPrice"    column="stop_loss_price"    />
+        <result property="direction"    column="direction"    />
+        <result property="symbol"    column="symbol"    />
+    </resultMap>
+
+    <sql id="selectMemberSuperContractWalletVo">
+        select mscw.*,m.username ,escc.symbol
+        from member_super_contract_wallet mscw
+        left join member m on m.id=mscw.member_id
+        left join ex_super_contract_coin escc on escc.id=mscw.contract_id
+    </sql>
+
+    <select id="selectMemberSuperContractWalletList" parameterType="com.financia.exchange.MemberSuperContractWallet" resultMap="MemberSuperContractWalletResult">
+        <include refid="selectMemberSuperContractWalletVo"/>
+        <where>  
+            <if test="memberId != null "> and mscw.member_id = #{memberId}</if>
+            <if test="usdtBalance != null "> and mscw.usdt_balance = #{usdtBalance}</if>
+            <if test="usdtBuyLeverage != null "> and mscw.usdt_buy_leverage = #{usdtBuyLeverage}</if>
+            <if test="status != null "> and mscw.status = #{status}</if>
+            <if test="usdtBuyPosition != null "> and mscw.usdt_buy_position = #{usdtBuyPosition}</if>
+            <if test="usdtBuyPrice != null "> and mscw.usdt_buy_price = #{usdtBuyPrice}</if>
+            <if test="usdtBuyPrincipalAmount != null "> and mscw.usdt_buy_principal_amount = #{usdtBuyPrincipalAmount}</if>
+            <if test="usdtLoss != null "> and mscw.usdt_loss = #{usdtLoss}</if>
+            <if test="usdtProfit != null "> and mscw.usdt_profit = #{usdtProfit}</if>
+            <if test="contractId != null "> and mscw.contract_id = #{contractId}</if>
+            <if test="entrustOrder != null  and entrustOrder != ''"> and entrust_order = #{entrustOrder}</if>
+            <if test="forceClosePrice != null "> and mscw.force_close_price = #{forceClosePrice}</if>
+            <if test="openFee != null "> and mscw.open_fee = #{openFee}</if>
+            <if test="closeFee != null "> and mscw.close_fee = #{closeFee}</if>
+            <if test="stopProfitPrice != null "> and mscw.stop_profit_price = #{stopProfitPrice}</if>
+            <if test="stopLossPrice != null "> and mscw.stop_loss_price = #{stopLossPrice}</if>
+            <if test="direction != null "> and mscw.direction = #{direction}</if>
+            <if test="username != null and username != ''"> and m.username = #{username}</if>
+        </where>
+    </select>
+    
+    <select id="selectMemberSuperContractWalletById" parameterType="Long" resultMap="MemberSuperContractWalletResult">
+        <include refid="selectMemberSuperContractWalletVo"/>
+        where mscw.id = #{id}
+    </select>
+        
+    <insert id="insertMemberSuperContractWallet" parameterType="com.financia.exchange.MemberSuperContractWallet" useGeneratedKeys="true" keyProperty="id">
+        insert into member_super_contract_wallet
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="memberId != null">member_id,</if>
+            <if test="usdtBalance != null">usdt_balance,</if>
+            <if test="usdtBuyLeverage != null">usdt_buy_leverage,</if>
+            <if test="status != null">status,</if>
+            <if test="usdtBuyPosition != null">usdt_buy_position,</if>
+            <if test="usdtBuyPrice != null">usdt_buy_price,</if>
+            <if test="usdtBuyPrincipalAmount != null">usdt_buy_principal_amount,</if>
+            <if test="usdtLoss != null">usdt_loss,</if>
+            <if test="usdtProfit != null">usdt_profit,</if>
+            <if test="contractId != null">contract_id,</if>
+            <if test="entrustOrder != null and entrustOrder != ''">entrust_order,</if>
+            <if test="createTime != null and createTime != ''">create_time,</if>
+            <if test="forceClosePrice != null">force_close_price,</if>
+            <if test="openFee != null">open_fee,</if>
+            <if test="closeFee != null">close_fee,</if>
+            <if test="stopProfitPrice != null">stop_profit_price,</if>
+            <if test="stopLossPrice != null">stop_loss_price,</if>
+            <if test="direction != null">direction,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="memberId != null">#{memberId},</if>
+            <if test="usdtBalance != null">#{usdtBalance},</if>
+            <if test="usdtBuyLeverage != null">#{usdtBuyLeverage},</if>
+            <if test="status != null">#{status},</if>
+            <if test="usdtBuyPosition != null">#{usdtBuyPosition},</if>
+            <if test="usdtBuyPrice != null">#{usdtBuyPrice},</if>
+            <if test="usdtBuyPrincipalAmount != null">#{usdtBuyPrincipalAmount},</if>
+            <if test="usdtFrozenBalance != null">#{usdtFrozenBalance},</if>
+            <if test="usdtLoss != null">#{usdtLoss},</if>
+            <if test="usdtPattern != null">#{usdtPattern},</if>
+            <if test="usdtProfit != null">#{usdtProfit},</if>
+            <if test="contractId != null">#{contractId},</if>
+            <if test="entrustOrder != null and entrustOrder != ''">#{entrustOrder},</if>
+            <if test="createTime != null and createTime != ''">#{createTime},</if>
+            <if test="forceClosePrice != null">#{forceClosePrice},</if>
+            <if test="openFee != null">#{openFee},</if>
+            <if test="closeFee != null">#{closeFee},</if>
+            <if test="stopProfitPrice != null">#{stopProfitPrice},</if>
+            <if test="stopLossPrice != null">#{stopLossPrice},</if>
+            <if test="direction != null">#{direction},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMemberSuperContractWallet" parameterType="com.financia.exchange.MemberSuperContractWallet">
+        update member_super_contract_wallet
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="memberId != null">member_id = #{memberId},</if>
+            <if test="usdtBalance != null">usdt_balance = #{usdtBalance},</if>
+            <if test="usdtBuyLeverage != null">usdt_buy_leverage = #{usdtBuyLeverage},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="usdtBuyPosition != null">usdt_buy_position = #{usdtBuyPosition},</if>
+            <if test="usdtBuyPrice != null">usdt_buy_price = #{usdtBuyPrice},</if>
+            <if test="usdtBuyPrincipalAmount != null">usdt_buy_principal_amount = #{usdtBuyPrincipalAmount},</if>
+            <if test="usdtLoss != null">usdt_loss = #{usdtLoss},</if>
+            <if test="usdtProfit != null">usdt_profit = #{usdtProfit},</if>
+            <if test="contractId != null">contract_id = #{contractId},</if>
+            <if test="entrustOrder != null and entrustOrder != ''">entrust_order = #{entrustOrder},</if>
+            <if test="createTime != null and createTime != ''">create_time = #{createTime},</if>
+            <if test="forceClosePrice != null">force_close_price = #{forceClosePrice},</if>
+            <if test="openFee != null">open_fee = #{openFee},</if>
+            <if test="closeFee != null">close_fee = #{closeFee},</if>
+            <if test="stopProfitPrice != null">stop_profit_price = #{stopProfitPrice},</if>
+            <if test="stopLossPrice != null">stop_loss_price = #{stopLossPrice},</if>
+            <if test="direction != null">direction = #{direction},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMemberSuperContractWalletById" parameterType="Long">
+        delete from member_super_contract_wallet where id = #{id}
+    </delete>
+
+    <delete id="deleteMemberSuperContractWalletByIds" parameterType="String">
+        delete from member_super_contract_wallet where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

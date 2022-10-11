@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.financia.quantitative.mapper.FinanceInterestMemberMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.financia.finance.FinanceInterestMember" id="financeInterestMemberMap">
+        <result property="id" column="id"/>
+        <result property="financeId" column="finance_id"/>
+        <result property="dateInterestNo" column="date_interest_no"/>
+        <result property="memberId" column="member_id"/>
+        <result property="principal" column="principal"/>
+        <result property="everydayRate" column="everyday_rate"/>
+        <result property="everydayInterest" column="everyday_interest"/>
+        <result property="profitCustomer" column="profit_customer"/>
+        <result property="timeInterest" column="time_interest"/>
+        <result property="state" column="state"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+</mapper>

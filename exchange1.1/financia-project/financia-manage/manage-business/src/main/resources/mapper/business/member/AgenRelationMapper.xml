@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.business.member.mapper.AgenRelationMapper">
+    
+    <resultMap type="com.financia.exchange.AgenRelation" id="AgenRelationResult">
+        <result property="id"    column="id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="inviteCode"    column="invite_code"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectAgenRelationVo">
+        select id, user_name, invite_code, status, create_time from agen_relation
+    </sql>
+
+    <select id="selectAgenRelationList" parameterType="com.financia.exchange.AgenRelation" resultMap="AgenRelationResult">
+        <include refid="selectAgenRelationVo"/>
+        <where>  
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+            <if test="inviteCode != null  and inviteCode != ''"> and invite_code = #{inviteCode}</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectAgenRelationById" parameterType="Long" resultMap="AgenRelationResult">
+        <include refid="selectAgenRelationVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAgenRelation" parameterType="com.financia.exchange.AgenRelation">
+        insert into agen_relation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+<!--            <if test="id != null">id,</if>-->
+            <if test="userName != null and userName != ''">user_name,</if>
+            <if test="inviteCode != null">invite_code,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+--             <if test="id != null">#{id},</if>
+            <if test="userName != null and userName != ''">#{userName},</if>
+            <if test="inviteCode != null">#{inviteCode},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAgenRelation" parameterType="com.financia.exchange.AgenRelation">
+        update agen_relation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userName != null and userName != ''">user_name = #{userName},</if>
+            <if test="inviteCode != null">invite_code = #{inviteCode},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAgenRelationById" parameterType="Long">
+        delete from agen_relation where id = #{id}
+    </delete>
+
+    <delete id="deleteAgenRelationByIds" parameterType="String">
+        delete from agen_relation where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

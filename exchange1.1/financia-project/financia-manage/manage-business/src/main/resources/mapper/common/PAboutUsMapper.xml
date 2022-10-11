@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.common.mapper.PAboutUsMapper">
+    
+    <resultMap type="com.financia.common.AboutUs" id="PAboutUsResult">
+        <result property="id"    column="id"    />
+        <result property="contentZh"    column="content_zh"    />
+        <result property="contentEn"    column="content_en"    />
+        <result property="appVersion"    column="app_version"    />
+        <result property="active"    column="active"    />
+        <result property="platform"    column="platform"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="linkurl"    column="linkurl"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectPAboutUsVo">
+        select id, content_zh, content_en, app_version, active, platform, create_time, update_time,linkurl,remark from p_about_us
+    </sql>
+
+    <select id="selectPAboutUsList" parameterType="com.financia.common.AboutUs" resultMap="PAboutUsResult">
+        <include refid="selectPAboutUsVo"/>
+        <where>  
+            <if test="contentZh != null  and contentZh != ''"> and content_zh = #{contentZh}</if>
+            <if test="contentEn != null  and contentEn != ''"> and content_en = #{contentEn}</if>
+            <if test="appVersion != null  and appVersion != ''"> and app_version = #{appVersion}</if>
+            <if test="active != null  and active != ''"> and active = #{active}</if>
+            <if test="platform != null  and platform != ''"> and platform = #{platform}</if>
+        </where>
+    </select>
+    
+    <select id="selectPAboutUsById" parameterType="Long" resultMap="PAboutUsResult">
+        <include refid="selectPAboutUsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPAboutUs" parameterType="com.financia.common.AboutUs" useGeneratedKeys="true" keyProperty="id">
+        insert into p_about_us
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="contentZh != null and contentZh != ''">content_zh,</if>
+            <if test="contentEn != null and contentEn != ''">content_en,</if>
+            <if test="appVersion != null and appVersion != ''">app_version,</if>
+            <if test="active != null">active,</if>
+            <if test="platform != null">platform,</if>
+            <if test="createTime != null and createTime != ''">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="linkurl != null">linkurl,</if>
+            <if test="remark != null">remark,</if>
+
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="contentZh != null and contentZh != ''">#{contentZh},</if>
+            <if test="contentEn != null and contentEn != ''">#{contentEn},</if>
+            <if test="appVersion != null and appVersion != ''">#{appVersion},</if>
+            <if test="active != null">#{active},</if>
+            <if test="platform != null">#{platform},</if>
+            <if test="createTime != null and createTime != ''">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="linkurl != null and linkurl != ''">#{linkurl},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePAboutUs" parameterType="com.financia.common.AboutUs">
+        update p_about_us
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="contentZh != null and contentZh != ''">content_zh = #{contentZh},</if>
+            <if test="contentEn != null and contentEn != ''">content_en = #{contentEn},</if>
+            <if test="appVersion != null and appVersion != ''">app_version = #{appVersion},</if>
+            <if test="active != null">active = #{active},</if>
+            <if test="platform != null">platform = #{platform},</if>
+            <if test="createTime != null and createTime != ''">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="linkurl != null">linkurl = #{linkurl},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePAboutUsById" parameterType="Long">
+        delete from p_about_us where id = #{id}
+    </delete>
+
+    <delete id="deletePAboutUsByIds" parameterType="String">
+        delete from p_about_us where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

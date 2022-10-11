@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.system.mapper.MemberLanguageMapper">
+    
+    <resultMap type="com.financia.business.MemberLanguage" id="MemberLanguageResult">
+        <result property="id"    column="id"    />
+        <result property="languageType"    column="language_type"    />
+        <result property="language"    column="language"    />
+        <result property="imgurl"    column="imgurl"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="lablestr"    column="lablestr"    />
+
+    </resultMap>
+
+    <sql id="selectMemberLanguageVo">
+        select id, language_type, language, imgurl, create_time, update_time,lablestr from member_language
+    </sql>
+
+    <select id="selectMemberLanguageList" parameterType="com.financia.business.MemberLanguage" resultMap="MemberLanguageResult">
+        <include refid="selectMemberLanguageVo"/>
+        <where>  
+            <if test="languageType != null  and languageType != ''"> and language_type like concat('%', #{languageType}, '%')</if>
+            <if test="language != null  and language != ''"> and language like concat('%', #{language}, '%')</if>
+            <if test="imgurl != null  and imgurl != ''"> and imgurl = #{imgurl}</if>
+        </where>
+    </select>
+    
+    <select id="selectMemberLanguageById" parameterType="Long" resultMap="MemberLanguageResult">
+        <include refid="selectMemberLanguageVo"/>
+        where id = #{id}
+    </select>
+
+
+
+
+
+</mapper>

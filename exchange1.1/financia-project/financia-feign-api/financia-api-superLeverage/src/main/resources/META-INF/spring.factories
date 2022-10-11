@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.financia.system.api.factory.RemoteUserFallbackFactory,\
+  com.financia.system.api.factory.RemoteLogFallbackFactory, \
+  com.financia.system.api.factory.RemoteFileFallbackFactory

@@ -1,0 +1,6 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.financia.common.security.config.WebMvcConfig,\
+  com.financia.common.security.service.TokenService,\
+  com.financia.common.security.aspect.PreAuthorizeAspect,\
+  com.financia.common.security.aspect.InnerAuthAspect,\
+  com.financia.common.security.handler.GlobalExceptionHandler

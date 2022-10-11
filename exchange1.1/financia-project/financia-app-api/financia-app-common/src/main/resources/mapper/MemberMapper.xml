@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.system.mapper.MemberMapper">
+
+    <resultMap type="com.financia.exchange.Member" id="MemberResult">
+        <result property="id"    column="id"    />
+        <result property="uid"    column="uid"    />
+        <result property="areaCode"    column="area_code"    />
+        <result property="phone"    column="phone"    />
+        <result property="email"    column="email"    />
+        <result property="username"    column="username"    />
+        <result property="password"    column="password"    />
+        <result property="inviteCode"    column="invite_code"    />
+        <result property="inviteId"    column="invite_id"    />
+        <result property="avatar"    column="avatar"    />
+        <result property="sign"    column="sign"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="status"    column="status"    />
+        <result property="defaultLanguage"    column="default_language"    />
+        <result property="defaultLegal"    column="default_legal"    />
+    </resultMap>
+
+    <sql id="selectMemberVo">
+        select id, uid, area_code, phone, email, username, password, invite_code, invite_id, avatar, sign, create_time, update_time, status,default_language,default_legal from member
+    </sql>
+
+    <select id="selectMemberList" parameterType="com.financia.exchange.Member" resultMap="MemberResult">
+        <include refid="selectMemberVo"/>
+        <where>
+            <if test="uid != null "> and uid = #{uid}</if>
+            <if test="areaCode != null  and areaCode != ''"> and area_code = #{areaCode}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="username != null  and username != ''"> and username like concat('%', #{username}, '%')</if>
+            <if test="password != null  and password != ''"> and password = #{password}</if>
+            <if test="inviteCode != null  and inviteCode != ''"> and invite_code = #{inviteCode}</if>
+            <if test="inviteId != null "> and invite_id = #{inviteId}</if>
+            <if test="avatar != null  and avatar != ''"> and avatar = #{avatar}</if>
+            <if test="sign != null  and sign != ''"> and sign = #{sign}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="defaultLanguage != null "> and default_language = #{defaultLanguage}</if>
+            <if test="defaultLegal != null "> and default_legal = #{defaultLegal}</if>
+        </where>
+    </select>
+
+    <select id="selectMemberById" parameterType="Long" resultMap="MemberResult">
+        <include refid="selectMemberVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertMember" parameterType="com.financia.exchange.Member" useGeneratedKeys="true" keyProperty="id">
+        insert into member
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uid != null">uid,</if>
+            <if test="areaCode != null and areaCode != ''">area_code,</if>
+            <if test="phone != null and phone != ''">phone,</if>
+            <if test="email != null and email != ''">email,</if>
+            <if test="username != null and username != ''">username,</if>
+            <if test="password != null and password != ''">password,</if>
+            <if test="inviteCode != null and inviteCode != ''">invite_code,</if>
+            <if test="inviteId != null">invite_id,</if>
+            <if test="avatar != null and avatar != ''">avatar,</if>
+            <if test="sign != null and sign != ''">sign,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="uid != null">#{uid},</if>
+            <if test="areaCode != null and areaCode != ''">#{areaCode},</if>
+            <if test="phone != null and phone != ''">#{phone},</if>
+            <if test="email != null and email != ''">#{email},</if>
+            <if test="username != null and username != ''">#{username},</if>
+            <if test="password != null and password != ''">#{password},</if>
+            <if test="inviteCode != null and inviteCode != ''">#{inviteCode},</if>
+            <if test="inviteId != null">#{inviteId},</if>
+            <if test="avatar != null and avatar != ''">#{avatar},</if>
+            <if test="sign != null and sign != ''">#{sign},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMember" parameterType="com.financia.exchange.Member">
+        update member
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="uid != null">uid = #{uid},</if>
+            <if test="areaCode != null and areaCode != ''">area_code = #{areaCode},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            <if test="email != null and email != ''">email = #{email},</if>
+            <if test="username != null and username != ''">username = #{username},</if>
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="inviteCode != null and inviteCode != ''">invite_code = #{inviteCode},</if>
+            <if test="inviteId != null">invite_id = #{inviteId},</if>
+            <if test="avatar != null and avatar != ''">avatar = #{avatar},</if>
+            <if test="sign != null and sign != ''">sign = #{sign},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="defaultLanguage != null">default_language = #{defaultLanguage},</if>
+            <if test="defaultLegal != null">default_legal = #{defaultLegal},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMemberById" parameterType="Long">
+        delete from member where id = #{id}
+    </delete>
+
+    <delete id="deleteMemberByIds" parameterType="String">
+        delete from member where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

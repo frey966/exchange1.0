@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.business.member.mapper.MemberGradeMapper">
+    
+    <resultMap type="com.financia.business.MemberGrade" id="MemberGradeResult">
+        <result property="id"    column="id"    />
+        <result property="gradeName"    column="grade_name"    />
+        <result property="minVale"    column="min_vale"    />
+        <result property="maxVale"    column="max_vale"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="sort"    column="sort"    />
+    </resultMap>
+
+    <sql id="selectMemberGradeVo">
+        select id, grade_name, min_vale, max_vale, status,sort, create_time from member_grade
+    </sql>
+
+    <select id="selectMemberGradeList" parameterType="com.financia.business.MemberGrade" resultMap="MemberGradeResult">
+        <include refid="selectMemberGradeVo"/>
+        <where>  
+            <if test="gradeName != null  and gradeName != ''"> and grade_name like concat('%', #{gradeName}, '%')</if>
+            <if test="minVale != null "> and min_vale = #{minVale}</if>
+            <if test="maxVale != null "> and max_vale = #{maxVale}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="sort != null "> and sort = #{sort}</if>
+        </where>
+        order by sort,create_time desc
+    </select>
+    
+    <select id="selectMemberGradeById" parameterType="Long" resultMap="MemberGradeResult">
+        <include refid="selectMemberGradeVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertMemberGrade" parameterType="com.financia.business.MemberGrade">
+        insert into member_grade
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="gradeName != null">grade_name,</if>
+            <if test="minVale != null">min_vale,</if>
+            <if test="maxVale != null">max_vale,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="sort != null">sort,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="gradeName != null">#{gradeName},</if>
+            <if test="minVale != null">#{minVale},</if>
+            <if test="maxVale != null">#{maxVale},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="sort != null">#{sort},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMemberGrade" parameterType="com.financia.business.MemberGrade">
+        update member_grade
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="gradeName != null">grade_name = #{gradeName},</if>
+            <if test="minVale != null">min_vale = #{minVale},</if>
+            <if test="maxVale != null">max_vale = #{maxVale},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="sort != null">sort = #{sort},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMemberGradeById" parameterType="Long">
+        delete from member_grade where id = #{id}
+    </delete>
+
+    <delete id="deleteMemberGradeByIds" parameterType="String">
+        delete from member_grade where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

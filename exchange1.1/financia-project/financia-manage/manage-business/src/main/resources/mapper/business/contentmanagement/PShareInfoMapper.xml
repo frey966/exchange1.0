@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.business.contentmanagement.mapper.PShareInfoMapper">
+    
+    <resultMap type="com.financia.common.MemberShare" id="PShareInfoResult">
+        <result property="shareId"    column="share_id"    />
+        <result property="shareImageEn"    column="share_image_en"    />
+        <result property="shareImageZh"    column="share_image_zh"    />
+        <result property="shareContentEn"    column="share_content_en"    />
+        <result property="shareContentZh"    column="share_content_zh"    />
+        <result property="link"    column="link"    />
+        <result property="active"    column="active"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectPShareInfoVo">
+        select share_id, share_image_en, share_image_zh, share_content_en, share_content_zh, link, active, create_time from p_share_info
+    </sql>
+
+    <select id="selectPShareInfoList" parameterType="com.financia.common.MemberShare" resultMap="PShareInfoResult">
+        <include refid="selectPShareInfoVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectPShareInfoByShareId" parameterType="Long" resultMap="PShareInfoResult">
+        <include refid="selectPShareInfoVo"/>
+        where share_id = #{shareId}
+    </select>
+        
+    <insert id="insertPShareInfo" parameterType="com.financia.common.MemberShare" useGeneratedKeys="true" keyProperty="shareId">
+        insert into p_share_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="shareImageEn != null">share_image_en,</if>
+            <if test="shareImageZh != null">share_image_zh,</if>
+            <if test="shareContentEn != null">share_content_en,</if>
+            <if test="shareContentZh != null">share_content_zh,</if>
+            <if test="link != null">link,</if>
+            <if test="active != null">active,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="shareImageEn != null">#{shareImageEn},</if>
+            <if test="shareImageZh != null">#{shareImageZh},</if>
+            <if test="shareContentEn != null">#{shareContentEn},</if>
+            <if test="shareContentZh != null">#{shareContentZh},</if>
+            <if test="link != null">#{link},</if>
+            <if test="active != null">#{active},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePShareInfo" parameterType="com.financia.common.MemberShare">
+        update p_share_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="shareImageEn != null">share_image_en = #{shareImageEn},</if>
+            <if test="shareImageZh != null">share_image_zh = #{shareImageZh},</if>
+            <if test="shareContentEn != null">share_content_en = #{shareContentEn},</if>
+            <if test="shareContentZh != null">share_content_zh = #{shareContentZh},</if>
+            <if test="link != null">link = #{link},</if>
+            <if test="active != null">active = #{active},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where share_id = #{shareId}
+    </update>
+
+    <delete id="deletePShareInfoByShareId" parameterType="Long">
+        delete from p_share_info where share_id = #{shareId}
+    </delete>
+
+    <delete id="deletePShareInfoByShareIds" parameterType="String">
+        delete from p_share_info where share_id in 
+        <foreach item="shareId" collection="array" open="(" separator="," close=")">
+            #{shareId}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.business.dataconfiguration.mapper.ExContractCoinMapper">
+
+    <resultMap type="com.financia.business.ExContractCoin" id="ExContractCoinResult">
+        <result property="id"    column="id"    />
+        <result property="baseSymbol"    column="base_symbol"    />
+        <result property="closeFee"    column="close_fee"    />
+        <result property="coinScale"    column="coin_scale"    />
+        <result property="coinSymbol"    column="coin_symbol"    />
+        <result property="enable"    column="enable"    />
+        <result property="enableMarketBuy"    column="enable_market_buy"    />
+        <result property="enableMarketSell"    column="enable_market_sell"    />
+        <result property="enableOpenBuy"    column="enable_open_buy"    />
+        <result property="enableOpenSell"    column="enable_open_sell"    />
+        <result property="enableTriggerEntrust"    column="enable_trigger_entrust"    />
+        <result property="exchangeable"    column="exchangeable"    />
+        <result property="feePercent"    column="fee_percent"    />
+        <result property="intervalHour"    column="interval_hour"    />
+        <result property="leverage"    column="leverage"    />
+        <result property="leverageType"    column="leverage_type"    />
+        <result property="maintenanceMarginRate"    column="maintenance_margin_rate"    />
+        <result property="makerFee"    column="maker_fee"    />
+        <result property="maxShare"    column="max_share"    />
+        <result property="minShare"    column="min_share"    />
+        <result property="name"    column="name"    />
+        <result property="openFee"    column="open_fee"    />
+        <result property="shareNumber"    column="share_number"    />
+        <result property="sort"    column="sort"    />
+        <result property="spread"    column="spread"    />
+        <result property="spreadType"    column="spread_type"    />
+        <result property="symbol"    column="symbol"    />
+        <result property="takerFee"    column="taker_fee"    />
+        <result property="totalCloseFee"    column="total_close_fee"    />
+        <result property="totalLoss"    column="total_loss"    />
+        <result property="totalOpenFee"    column="total_open_fee"    />
+        <result property="totalProfit"    column="total_profit"    />
+        <result property="type"    column="type"    />
+        <result property="visible"    column="visible"    />
+        <result property="contractId"    column="contract_id"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="popular"    column="popular"    />
+    </resultMap>
+
+    <sql id="selectExContractCoinVo">
+        select id, base_symbol, close_fee, coin_scale, coin_symbol, enable, enable_market_buy, enable_market_sell, enable_open_buy, enable_open_sell, enable_trigger_entrust, exchangeable, fee_percent, interval_hour, leverage, leverage_type, maintenance_margin_rate, maker_fee, max_share, min_share, name, open_fee, share_number, sort, spread, spread_type, symbol, taker_fee, total_close_fee, total_loss, total_open_fee, total_profit, type, visible,update_time,contract_id from ex_contract_coin
+    </sql>
+    <sql id="selectExContractCoinVo2">
+        select id,symbol ,
+            coin_symbol ,
+            fee_percent,
+            leverage,
+            fee_percent,
+            popular,
+            visible,
+            enable ,
+            sort,
+            create_time ,
+            update_time  from ex_contract_coin
+    </sql>
+    <select id="selectExContractCoinList" parameterType="com.financia.business.ExContractCoin" resultMap="ExContractCoinResult">
+        <include refid="selectExContractCoinVo2"/>
+        <where>
+            <if test="baseSymbol != null  and baseSymbol != ''"> and base_symbol = #{baseSymbol}</if>
+            <if test="coinSymbol != null  and coinSymbol != ''"> and coin_symbol = #{coinSymbol}</if>
+            <if test="enable != null "> and enable = #{enable}</if>
+            <if test="enableMarketBuy != null "> and enable_market_buy = #{enableMarketBuy}</if>
+            <if test="enableMarketSell != null "> and enable_market_sell = #{enableMarketSell}</if>
+            <if test="enableOpenBuy != null "> and enable_open_buy = #{enableOpenBuy}</if>
+            <if test="enableOpenSell != null "> and enable_open_sell = #{enableOpenSell}</if>
+            <if test="enableTriggerEntrust != null "> and enable_trigger_entrust = #{enableTriggerEntrust}</if>
+            <if test="exchangeable != null "> and exchangeable = #{exchangeable}</if>
+            <if test="leverageType != null "> and leverage_type = #{leverageType}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="spreadType != null "> and spread_type = #{spreadType}</if>
+            <if test="type != null "> and type = #{type}</if>
+            <if test="contractId != null "> and contract_id = #{contractId}</if>
+
+            <if test="symbol != null  and symbol != ''"> and symbol like concat('%', #{symbol}, '%')</if>
+            <if test="popular != null "> and popular = #{popular}</if>
+            <if test="visible != null "> and visible = #{visible}</if>
+            <if test="enable != null "> and enable = #{enable}</if>
+            <if test="status != null"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectExContractCoinById" parameterType="Long" resultMap="ExContractCoinResult">
+        <include refid="selectExContractCoinVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertExContractCoin" parameterType="com.financia.business.ExContractCoin" useGeneratedKeys="true" keyProperty="id">
+        insert into ex_contract_coin
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="baseSymbol != null">base_symbol,</if>
+            <if test="closeFee != null">close_fee,</if>
+            <if test="coinScale != null">coin_scale,</if>
+            <if test="coinSymbol != null">coin_symbol,</if>
+            <if test="enableMarketBuy != null">enable_market_buy,</if>
+            <if test="enableMarketSell != null">enable_market_sell,</if>
+            <if test="enableOpenBuy != null">enable_open_buy,</if>
+            <if test="enableOpenSell != null">enable_open_sell,</if>
+            <if test="enableTriggerEntrust != null">enable_trigger_entrust,</if>
+            <if test="exchangeable != null">exchangeable,</if>
+            <if test="feePercent != null">fee_percent,</if>
+            <if test="intervalHour != null">interval_hour,</if>
+            <if test="leverage != null">leverage,</if>
+            <if test="leverageType != null">leverage_type,</if>
+            <if test="maintenanceMarginRate != null">maintenance_margin_rate,</if>
+            <if test="makerFee != null">maker_fee,</if>
+            <if test="maxShare != null">max_share,</if>
+            <if test="minShare != null">min_share,</if>
+            <if test="name != null">name,</if>
+            <if test="openFee != null">open_fee,</if>
+            <if test="shareNumber != null">share_number,</if>
+            <if test="sort != null">sort,</if>
+            <if test="spread != null">spread,</if>
+            <if test="spreadType != null">spread_type,</if>
+            <if test="symbol != null">symbol,</if>
+            <if test="takerFee != null">taker_fee,</if>
+            <if test="totalCloseFee != null">total_close_fee,</if>
+            <if test="totalLoss != null">total_loss,</if>
+            <if test="totalOpenFee != null">total_open_fee,</if>
+            <if test="totalProfit != null">total_profit,</if>
+            <if test="type != null">type,</if>
+            <if test="contractId != null">contract_id,</if>
+            <if test="updateTime != null">update_time,</if>
+
+            <if test="enable != null">enable,</if>
+            <if test="visible != null">visible,</if>
+            <if test="popular != null">popular,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="baseSymbol != null">#{baseSymbol},</if>
+            <if test="closeFee != null">#{closeFee},</if>
+            <if test="coinScale != null">#{coinScale},</if>
+            <if test="coinSymbol != null">#{coinSymbol},</if>
+            <if test="enableMarketBuy != null">#{enableMarketBuy},</if>
+            <if test="enableMarketSell != null">#{enableMarketSell},</if>
+            <if test="enableOpenBuy != null">#{enableOpenBuy},</if>
+            <if test="enableOpenSell != null">#{enableOpenSell},</if>
+            <if test="enableTriggerEntrust != null">#{enableTriggerEntrust},</if>
+            <if test="exchangeable != null">#{exchangeable},</if>
+            <if test="feePercent != null">#{feePercent},</if>
+            <if test="intervalHour != null">#{intervalHour},</if>
+            <if test="leverage != null">#{leverage},</if>
+            <if test="leverageType != null">#{leverageType},</if>
+            <if test="maintenanceMarginRate != null">#{maintenanceMarginRate},</if>
+            <if test="makerFee != null">#{makerFee},</if>
+            <if test="maxShare != null">#{maxShare},</if>
+            <if test="minShare != null">#{minShare},</if>
+            <if test="name != null">#{name},</if>
+            <if test="openFee != null">#{openFee},</if>
+            <if test="shareNumber != null">#{shareNumber},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="spread != null">#{spread},</if>
+            <if test="spreadType != null">#{spreadType},</if>
+            <if test="symbol != null">#{symbol},</if>
+            <if test="takerFee != null">#{takerFee},</if>
+            <if test="totalCloseFee != null">#{totalCloseFee},</if>
+            <if test="totalLoss != null">#{totalLoss},</if>
+            <if test="totalOpenFee != null">#{totalOpenFee},</if>
+            <if test="totalProfit != null">#{totalProfit},</if>
+            <if test="type != null">#{type},</if>
+            <if test="contractId != null">#{contractId},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+
+            <if test="enable != null">#{enable},</if>
+            <if test="visible != null">#{visible},</if>
+            <if test="popular != null">#{popular},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateExContractCoin" parameterType="com.financia.business.ExContractCoin">
+        update ex_contract_coin
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="baseSymbol != null">base_symbol = #{baseSymbol},</if>
+            <if test="closeFee != null">close_fee = #{closeFee},</if>
+            <if test="coinScale != null">coin_scale = #{coinScale},</if>
+            <if test="coinSymbol != null">coin_symbol = #{coinSymbol},</if>
+            <if test="enableMarketBuy != null">enable_market_buy = #{enableMarketBuy},</if>
+            <if test="enableMarketSell != null">enable_market_sell = #{enableMarketSell},</if>
+            <if test="enableOpenBuy != null">enable_open_buy = #{enableOpenBuy},</if>
+            <if test="enableOpenSell != null">enable_open_sell = #{enableOpenSell},</if>
+            <if test="enableTriggerEntrust != null">enable_trigger_entrust = #{enableTriggerEntrust},</if>
+            <if test="exchangeable != null">exchangeable = #{exchangeable},</if>
+            <if test="feePercent != null">fee_percent = #{feePercent},</if>
+            <if test="intervalHour != null">interval_hour = #{intervalHour},</if>
+            <if test="leverage != null">leverage = #{leverage},</if>
+            <if test="leverageType != null">leverage_type = #{leverageType},</if>
+            <if test="maintenanceMarginRate != null">maintenance_margin_rate = #{maintenanceMarginRate},</if>
+            <if test="makerFee != null">maker_fee = #{makerFee},</if>
+            <if test="maxShare != null">max_share = #{maxShare},</if>
+            <if test="minShare != null">min_share = #{minShare},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="openFee != null">open_fee = #{openFee},</if>
+            <if test="shareNumber != null">share_number = #{shareNumber},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="spread != null">spread = #{spread},</if>
+            <if test="spreadType != null">spread_type = #{spreadType},</if>
+            <if test="symbol != null">symbol = #{symbol},</if>
+            <if test="takerFee != null">taker_fee = #{takerFee},</if>
+            <if test="totalCloseFee != null">total_close_fee = #{totalCloseFee},</if>
+            <if test="totalLoss != null">total_loss = #{totalLoss},</if>
+            <if test="totalOpenFee != null">total_open_fee = #{totalOpenFee},</if>
+            <if test="totalProfit != null">total_profit = #{totalProfit},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="contractId != null">contract_id=#{contractId},</if>
+            <if test="updateTime != null">update_time=#{updateTime},</if>
+
+            <if test="enable != null">enable = #{enable},</if>
+            <if test="visible != null">visible = #{visible},</if>
+            <if test="popular != null">popular = #{popular},</if>
+            <if test="status != null">status = #{status},</if>
+            update_time = date_format(now(),'%Y-%m-%d %H:%i:%s')
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteExContractCoinById" parameterType="Long">
+        delete from ex_contract_coin where id = #{id}
+    </delete>
+
+    <delete id="deleteExContractCoinByIds" parameterType="String">
+        delete from ex_contract_coin where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

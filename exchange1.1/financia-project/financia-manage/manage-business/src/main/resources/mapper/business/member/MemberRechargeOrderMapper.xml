@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.business.member.mapper.MemberRechargeOrderMapper">
+    
+    <resultMap type="com.financia.exchange.MemberRechargeOrder" id="MemberRechargeOrderResult">
+        <result property="id"    column="id"    />
+        <result property="memberId"    column="member_id"    />
+        <result property="addressId"    column="address_id"    />
+        <result property="address"    column="address"    />
+        <result property="chain"    column="chain"    />
+        <result property="count"    column="count"    />
+        <result property="money"    column="money"    />
+        <result property="transactionHash"    column="transaction_hash"    />
+        <result property="rechargeStatus"    column="recharge_status"    />
+        <result property="orderStatus"    column="order_status"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="jobUpdateTime"    column="job_update_time"    />
+        <result property="username"    column="username"    />
+    </resultMap>
+
+    <sql id="selectMemberRechargeOrderVo">
+        select mro.* ,m.username
+        from member_recharge_order mro
+        left join member m on m.id=mro.member_id
+    </sql>
+
+    <select id="selectMemberRechargeOrderList" parameterType="com.financia.exchange.MemberRechargeOrder" resultMap="MemberRechargeOrderResult">
+        <include refid="selectMemberRechargeOrderVo"/>
+        <where>  
+            <if test="memberId != null "> and mro.member_id = #{memberId}</if>
+            <if test="chain != null  and chain != ''"> and mro.chain = #{chain}</if>
+            <if test="rechargeStatus != null "> and mro.recharge_status = #{rechargeStatus}</if>
+            <if test="orderStatus != null "> and mro.order_status = #{orderStatus}</if>
+            <if test="status != null "> and mro.status = #{status}</if>
+            <if test="addressId != null "> and mro.address_id = #{addressId}</if>
+            <if test="username != null "> and m.username = #{username}</if>
+        </where>
+        order by create_time desc
+    </select>
+    
+    <select id="selectMemberRechargeOrderById" parameterType="Long" resultMap="MemberRechargeOrderResult">
+        <include refid="selectMemberRechargeOrderVo"/>
+        where mro.id = #{id}
+    </select>
+        
+    <insert id="insertMemberRechargeOrder" parameterType="com.financia.exchange.MemberRechargeOrder">
+        insert into member_recharge_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="memberId != null">member_id,</if>
+            <if test="addressId != null">address_id,</if>
+            <if test="address != null and address != ''">address,</if>
+            <if test="chain != null and chain != ''">chain,</if>
+            <if test="count != null">count,</if>
+            <if test="money != null">money,</if>
+            <if test="transactionHash != null">transaction_hash,</if>
+            <if test="rechargeStatus != null">recharge_status,</if>
+            <if test="orderStatus != null">order_status,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="updateBy != null and updateBy != ''">update_by,</if>
+            <if test="createTime != null and createTime != ''">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="jobUpdateTime != null">job_update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="memberId != null">#{memberId},</if>
+            <if test="addressId != null">#{addressId},</if>
+            <if test="address != null and address != ''">#{address},</if>
+            <if test="chain != null and chain != ''">#{chain},</if>
+            <if test="count != null">#{count},</if>
+            <if test="money != null">#{money},</if>
+            <if test="transactionHash != null">#{transactionHash},</if>
+            <if test="rechargeStatus != null">#{rechargeStatus},</if>
+            <if test="orderStatus != null">#{orderStatus},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+            <if test="createTime != null and createTime != ''">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="jobUpdateTime != null">#{jobUpdateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMemberRechargeOrder" parameterType="com.financia.exchange.MemberRechargeOrder">
+        update member_recharge_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="memberId != null">member_id = #{memberId},</if>
+            <if test="addressId != null">address_id = #{addressId},</if>
+            <if test="address != null and address != ''">address = #{address},</if>
+            <if test="chain != null and chain != ''">chain = #{chain},</if>
+            <if test="count != null">count = #{count},</if>
+            <if test="money != null">money = #{money},</if>
+            <if test="transactionHash != null">transaction_hash = #{transactionHash},</if>
+            <if test="rechargeStatus != null">recharge_status = #{rechargeStatus},</if>
+            <if test="orderStatus != null">order_status = #{orderStatus},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="createTime != null and createTime != ''">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="jobUpdateTime != null">job_update_time = #{jobUpdateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMemberRechargeOrderById" parameterType="Long">
+        delete from member_recharge_order where id = #{id}
+    </delete>
+
+    <delete id="deleteMemberRechargeOrderByIds" parameterType="String">
+        delete from member_recharge_order where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

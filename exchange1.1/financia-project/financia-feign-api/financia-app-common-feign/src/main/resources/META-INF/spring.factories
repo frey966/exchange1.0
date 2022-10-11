@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.financia.exchange.feign.fallback.MemberClientFallBack,\
+  com.financia.exchange.feign.fallback.MemberWalletFallBack

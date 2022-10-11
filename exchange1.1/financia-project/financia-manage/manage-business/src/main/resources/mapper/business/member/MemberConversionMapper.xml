@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.business.member.mapper.MemberConversionMapper">
+    <resultMap type="com.financia.exchange.vo.MemberConversionVo" id="MemberConversionResult">
+        <result property="coinName" column="exchange_coin_name"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="exchangeAmount" column="exchange_amount"/>
+        <result property="nationalMoney" column="national_money"/>
+        <result property="symbols" column="symbols"/>
+        <result property="exchangeRate" column="exchange_rate"/>
+        <result property="orderStatus" column="order_status"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+
+    <select id="getMemberConversionList" resultMap="MemberConversionResult">
+        SELECT p.exchange_coin_name,
+               m.phone,
+               m.email,
+               o.exchange_amount,
+               o.national_money,
+               p.symbols,
+               o.exchange_rate,
+               o.order_status,
+               o.order_no,
+               o.create_time
+        FROM member_exchange_order o,
+             member m,
+             p_national_currency p
+        <where>
+            o.coin_id = p.id
+            AND m.id = o.member_id
+            AND m.status=1
+            <if test="orderNo != null  and orderNo != ''"> and  o.order_no =#{orderNo} </if>
+            <if test="phone != null  and phone != ''"> and  m.phone =#{phone} </if>
+            <if test="email != null  and email != ''"> and   m.email =#{email} </if>
+            <if test="orderStatus != null  and orderStatus != ''"> and   o.order_status =#{orderStatus} </if>
+        </where>
+    </select>
+</mapper>

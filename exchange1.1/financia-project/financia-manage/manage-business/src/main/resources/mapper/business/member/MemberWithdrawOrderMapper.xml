@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.business.member.mapper.MemberWithdrawOrderMapper">
+    
+    <resultMap type="com.financia.exchange.MemberWithdrawOrder" id="MemberWithdrawOrderResult">
+        <result property="id"    column="id"    />
+        <result property="memberId"    column="member_id"    />
+        <result property="toAddress"    column="to_address"    />
+        <result property="fromAddress"    column="from_address"    />
+        <result property="chain"    column="chain"    />
+        <result property="money"    column="money"    />
+        <result property="withdrawStatus"    column="withdraw_status"    />
+        <result property="orderStatus"    column="order_status"    />
+        <result property="status"    column="status"    />
+        <result property="checkStatus"    column="check_status"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="jobUpdateTime"    column="job_update_time"    />
+        <result property="username"    column="username"    />
+        <result property="pcwawithdrowAmount"    column="pcwawithdrowAmount"    />
+        <result property="count"    column="count"    />
+
+    </resultMap>
+
+    <sql id="selectMemberWithdrawOrderVo">
+        select
+			CASE mwo.chain_id
+				WHEN 1 THEN 'TRX'
+				WHEN 2 THEN 'BSC'
+				WHEN 3 THEN 'ETH'
+				WHEN 4 THEN 'HECO'
+				ELSE ''
+			END as chain,
+			mwo.* ,m.username,pcwa.withdrow_amount pcwawithdrowAmount
+        from member_withdraw_order mwo
+        left join member m on m.id=mwo.member_id
+        left join p_company_wallet_address pcwa on pcwa.address=mwo.from_address
+    </sql>
+
+    <select id="selectMemberWithdrawOrderList" parameterType="com.financia.exchange.MemberWithdrawOrder" resultMap="MemberWithdrawOrderResult">
+        <include refid="selectMemberWithdrawOrderVo"/>
+        <where>
+          1=1
+            <if test="memberId != null "> and mwo.member_id = #{memberId}</if>
+            <if test="toAddress != null  and toAddress != ''"> and mwo.to_address = #{toAddress}</if>
+            <if test="fromAddress != null  and fromAddress != ''"> and mwo.from_address = #{fromAddress}</if>
+            <if test="chain != null  and chain != ''"> and mwo.chain = #{chain}</if>
+            <if test="money != null "> and mwo.money = #{money}</if>
+            <if test="withdrawStatus != null "> and mwo.withdraw_status = #{withdrawStatus}</if>
+            <if test="orderStatus != null "> and mwo.order_status = #{orderStatus}</if>
+            <if test="status != null "> and mwo.status = #{status}</if>
+            <if test="checkStatus != null "> and check_status = #{checkStatus}</if>
+            <if test="jobUpdateTime != null  and jobUpdateTime != ''"> and mwo.job_update_time = #{jobUpdateTime}</if>
+            <if test="username != null "> and m.username = #{username}</if>
+            <if test="pcwawithdrowAmount == 'ok' "> and mwo.money <![CDATA[ >= ]]> pcwa.withdrow_amount</if>
+
+        </where>
+    </select>
+    
+    <select id="selectMemberWithdrawOrderById" parameterType="Long" resultMap="MemberWithdrawOrderResult">
+        <include refid="selectMemberWithdrawOrderVo"/>
+        where mwo.id = #{id}
+    </select>
+        
+    <insert id="insertMemberWithdrawOrder" parameterType="com.financia.exchange.MemberWithdrawOrder" useGeneratedKeys="true" keyProperty="id">
+        insert into member_withdraw_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="memberId != null">member_id,</if>
+            <if test="toAddress != null and toAddress != ''">to_address,</if>
+            <if test="fromAddress != null and fromAddress != ''">from_address,</if>
+            <if test="chain != null and chain != ''">chain,</if>
+            <if test="money != null">money,</if>
+            <if test="withdrawStatus != null">withdraw_status,</if>
+            <if test="orderStatus != null">order_status,</if>
+            <if test="status != null">status,</if>
+            <if test="checkStatus != null">check_status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="updateBy != null and updateBy != ''">update_by,</if>
+            <if test="createTime != null and createTime != ''">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="jobUpdateTime != null">job_update_time,</if>
+            <if test="count != null">count,</if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="memberId != null">#{memberId},</if>
+            <if test="toAddress != null and toAddress != ''">#{toAddress},</if>
+            <if test="fromAddress != null and fromAddress != ''">#{fromAddress},</if>
+            <if test="chain != null and chain != ''">#{chain},</if>
+            <if test="money != null">#{money},</if>
+            <if test="withdrawStatus != null">#{withdrawStatus},</if>
+            <if test="orderStatus != null">#{orderStatus},</if>
+            <if test="status != null">#{status},</if>
+            <if test="checkStatus != null">#{checkStatus},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+            <if test="createTime != null and createTime != ''">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="jobUpdateTime != null">#{jobUpdateTime},</if>
+            <if test="count != null">#{count},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMemberWithdrawOrder" parameterType="com.financia.exchange.MemberWithdrawOrder">
+        update member_withdraw_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="memberId != null">member_id = #{memberId},</if>
+            <if test="toAddress != null and toAddress != ''">to_address = #{toAddress},</if>
+            <if test="fromAddress != null and fromAddress != ''">from_address = #{fromAddress},</if>
+            <if test="chain != null and chain != ''">chain = #{chain},</if>
+            <if test="money != null">money = #{money},</if>
+            <if test="withdrawStatus != null">withdraw_status = #{withdrawStatus},</if>
+            <if test="orderStatus != null">order_status = #{orderStatus},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="checkStatus != null">check_status = #{checkStatus},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="createTime != null and createTime != ''">create_time = #{createTime},</if>
+            <if test="updateTime != null and updateTime != ''">update_time = #{updateTime},</if>
+            <if test="jobUpdateTime != null">job_update_time = #{jobUpdateTime},</if>
+            <if test="count != null">count = #{count},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMemberWithdrawOrderById" parameterType="Long">
+        delete from member_withdraw_order where id = #{id}
+    </delete>
+
+    <delete id="deleteMemberWithdrawOrderByIds" parameterType="String">
+        delete from member_withdraw_order where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

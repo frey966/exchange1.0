@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.financia.common.log.service.AsyncLogService,\
+  com.financia.common.log.aspect.LogAspect

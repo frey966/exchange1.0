@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.business.member.mapper.MemberAssetRecordsMapper">
+    
+    <resultMap type="com.financia.exchange.MemberAssetRecords" id="MemberAssetRecordsResult">
+        <result property="id"    column="id"    />
+        <result property="memberId"    column="member_id"    />
+        <result property="assetType"    column="asset_type"    />
+        <result property="amount"    column="amount"    />
+        <result property="symbol"    column="symbol"    />
+        <result property="entrustOrder"    column="entrust_order"    />
+        <result property="comment"    column="comment"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="username"    column="username"    />
+    </resultMap>
+
+    <sql id="selectMemberAssetRecordsVo">
+        select  mar.*,m.username
+        from member_asset_records mar
+        left join member m on m.id=mar.member_id
+    </sql>
+
+    <select id="selectMemberAssetRecordsList" parameterType="com.financia.exchange.MemberAssetRecords" resultMap="MemberAssetRecordsResult">
+        <include refid="selectMemberAssetRecordsVo"/>
+        <where>  
+            <if test="memberId != null "> and mar.member_id = #{memberId}</if>
+            <if test="assetType != null "> and mar.asset_type = #{assetType}</if>
+            <if test="amount != null "> and mar.amount = #{amount}</if>
+            <if test="symbol != null  and symbol != ''"> and mar.symbol like concat('%', #{symbol}, '%')</if>
+            <if test="entrustOrder != null  and entrustOrder != ''"> and mar.entrust_order like concat('%', #{entrustOrder}, '%')</if>
+            <if test="comment != null  and comment != ''"> and mar.comment = #{comment}</if>
+            <if test="username != null  and username != ''"> and m.username = #{username}</if>
+        </where>
+        order by mar.create_time desc
+    </select>
+    
+    <select id="selectMemberAssetRecordsById" parameterType="Long" resultMap="MemberAssetRecordsResult">
+        <include refid="selectMemberAssetRecordsVo"/>
+        where mar.id = #{id}
+    </select>
+        
+    <insert id="insertMemberAssetRecords" parameterType="com.financia.exchange.MemberAssetRecords" useGeneratedKeys="true" keyProperty="id">
+        insert into member_asset_records
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="memberId != null">member_id,</if>
+            <if test="assetType != null">asset_type,</if>
+            <if test="amount != null">amount,</if>
+            <if test="symbol != null and symbol != ''">symbol,</if>
+            <if test="entrustOrder != null and entrustOrder != ''">entrust_order,</if>
+            <if test="comment != null and comment != ''">comment,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="memberId != null">#{memberId},</if>
+            <if test="assetType != null">#{assetType},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="symbol != null and symbol != ''">#{symbol},</if>
+            <if test="entrustOrder != null and entrustOrder != ''">#{entrustOrder},</if>
+            <if test="comment != null and comment != ''">#{comment},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMemberAssetRecords" parameterType="com.financia.exchange.MemberAssetRecords">
+        update member_asset_records
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="memberId != null">member_id = #{memberId},</if>
+            <if test="assetType != null">asset_type = #{assetType},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="symbol != null and symbol != ''">symbol = #{symbol},</if>
+            <if test="entrustOrder != null and entrustOrder != ''">entrust_order = #{entrustOrder},</if>
+            <if test="comment != null and comment != ''">comment = #{comment},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMemberAssetRecordsById" parameterType="Long">
+        delete from member_asset_records where id = #{id}
+    </delete>
+
+    <delete id="deleteMemberAssetRecordsByIds" parameterType="String">
+        delete from member_asset_records where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

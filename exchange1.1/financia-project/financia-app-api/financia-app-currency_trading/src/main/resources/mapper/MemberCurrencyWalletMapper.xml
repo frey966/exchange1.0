@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.financia.exchange.mapper.MemberCurrencyWalletMapper">
+
+	<select id="findByCoinIdAndMemberId" resultType="com.financia.currency.MemberCryptoCurrencyWallet">
+        select
+            wallet.id,
+            wallet.member_id,
+            wallet.coin_id,
+            wallet.coin_symbol,
+            wallet.balance_money,
+            wallet.frezze_money,
+            wallet.status,
+            wallet.create_time,
+            currency.image_url as coinImgUrl
+        from member_crypto_currency_wallet wallet
+        left join p_crypto_currency currency on wallet.coin_symbol=currency.coin_name
+        where wallet.member_id=#{memberId} and wallet.coin_id=#{coinId} and wallet.status=1
+        limit 1
+    </select>
+
+    <select id="findByMemberIdAndNotContainCoinId" resultType="com.financia.currency.MemberCryptoCurrencyWallet">
+        select
+            wallet.id,
+            wallet.member_id,
+            wallet.coin_id,
+            wallet.coin_symbol,
+            wallet.balance_money,
+            wallet.frezze_money,
+            wallet.status,
+            wallet.create_time,
+            currency.image_url as coinImgUrl
+        from member_crypto_currency_wallet wallet
+        left join p_crypto_currency currency on wallet.coin_symbol=currency.coin_name
+        where wallet.member_id=#{memberId}
+        and wallet.coin_id!=#{coinId}
+        and wallet.status=1
+        and (wallet.balance_money>0 or wallet.frezze_money>0)
+        order by coin_id asc
+    </select>
+
+    <select id="findByMemberId" resultType="com.financia.currency.MemberCryptoCurrencyWallet">
+        select
+            wallet.id,
+            wallet.member_id,
+            wallet.coin_id,
+            wallet.coin_symbol,
+            wallet.balance_money,
+            wallet.frezze_money,
+            wallet.status,
+            wallet.create_time,
+            currency.image_url as coinImgUrl
+        from member_crypto_currency_wallet wallet
+        left join p_crypto_currency currency on wallet.coin_symbol=currency.coin_name
+        where wallet.member_id=#{memberId}
+        and wallet.status=1 
+        order by wallet.balance_money desc
+    </select>
+
+
+</mapper>

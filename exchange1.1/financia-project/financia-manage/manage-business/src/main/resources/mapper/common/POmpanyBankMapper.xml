@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.business.dataconfiguration.mapper.POmpanyBankMapper">
+
+    <resultMap type="com.financia.exchange.POmpanyBank" id="POmpanyBankResult">
+        <result property="id"    column="id"    />
+        <result property="bankName"    column="bank_name"    />
+        <result property="bankNo"    column="bank_no"    />
+        <result property="name"    column="name"    />
+        <result property="bankInfo"    column="bank_info"    />
+        <result property="country"    column="country"    />
+        <result property="coinId"    column="coin_id"    />
+        <result property="type"    column="type"    />
+        <result property="direction"    column="direction"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectPOmpanyBankVo">
+        select id, bank_name, bank_no, name, bank_info, country, coin_id, type, direction, status, create_time, update_time from p_ompany_bank
+    </sql>
+
+    <select id="selectPOmpanyBankList" parameterType="com.financia.exchange.POmpanyBank" resultMap="POmpanyBankResult">
+        <include refid="selectPOmpanyBankVo"/>
+        <where>
+            <if test="bankName != null  and bankName != ''"> and bank_name like concat('%', #{bankName}, '%')</if>
+            <if test="bankNo != null  and bankNo != ''"> and bank_no = #{bankNo}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="bankInfo != null  and bankInfo != ''"> and bank_info = #{bankInfo}</if>
+            <if test="country != null  and country != ''"> and country = #{country}</if>
+            <if test="coinId != null "> and coin_id = #{coinId}</if>
+            <if test="type != null "> and type = #{type}</if>
+            <if test="direction != null "> and direction = #{direction}</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectPOmpanyBankById" parameterType="Long" resultMap="POmpanyBankResult">
+        <include refid="selectPOmpanyBankVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertPOmpanyBank" parameterType="com.financia.exchange.POmpanyBank" useGeneratedKeys="true" keyProperty="id">
+        insert into p_ompany_bank
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bankName != null and bankName != ''">bank_name,</if>
+            <if test="bankNo != null and bankNo != ''">bank_no,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="bankInfo != null and bankInfo != ''">bank_info,</if>
+            <if test="country != null and country != ''">country,</if>
+            <if test="coinId != null">coin_id,</if>
+            <if test="type != null">type,</if>
+            <if test="direction != null">direction,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bankName != null and bankName != ''">#{bankName},</if>
+            <if test="bankNo != null and bankNo != ''">#{bankNo},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="bankInfo != null and bankInfo != ''">#{bankInfo},</if>
+            <if test="country != null and country != ''">#{country},</if>
+            <if test="coinId != null">#{coinId},</if>
+            <if test="type != null">#{type},</if>
+            <if test="direction != null">#{direction},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePOmpanyBank" parameterType="com.financia.exchange.POmpanyBank">
+        update p_ompany_bank
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="bankName != null and bankName != ''">bank_name = #{bankName},</if>
+            <if test="bankNo != null and bankNo != ''">bank_no = #{bankNo},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="bankInfo != null and bankInfo != ''">bank_info = #{bankInfo},</if>
+            <if test="country != null and country != ''">country = #{country},</if>
+            <if test="coinId != null">coin_id = #{coinId},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="direction != null">direction = #{direction},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePOmpanyBankById" parameterType="Long">
+        delete from p_ompany_bank where id = #{id}
+    </delete>
+
+    <delete id="deletePOmpanyBankByIds" parameterType="String">
+        delete from p_ompany_bank where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

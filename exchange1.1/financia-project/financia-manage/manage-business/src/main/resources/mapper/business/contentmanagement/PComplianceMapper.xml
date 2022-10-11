@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.business.contentmanagement.mapper.PComplianceMapper">
+    
+    <resultMap type="com.financia.common.PCompliance" id="PComplianceResult">
+        <result property="id"    column="id"    />
+        <result property="contentstr"    column="contentstr"    />
+        <result property="type"    column="type"    />
+        <result property="title"    column="title"    />
+        <result property="name1"    column="name1"    />
+        <result property="name2"    column="name2"    />
+        <result property="imgurl1"    column="imgurl1"    />
+        <result property="imgurl2"    column="imgurl2"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectPComplianceVo">
+        select id, contentstr, type, title, name1, name2, imgurl1, imgurl2, create_time, update_time from p_compliance
+    </sql>
+
+    <select id="selectPComplianceList" parameterType="com.financia.common.PCompliance" resultMap="PComplianceResult">
+        <include refid="selectPComplianceVo"/>
+        <where>  
+            <if test="contentstr != null  and contentstr != ''"> and contentstr = #{contentstr}</if>
+            <if test="type != null "> and type = #{type}</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="name1 != null  and name1 != ''"> and name1 = #{name1}</if>
+            <if test="name2 != null  and name2 != ''"> and name2 = #{name2}</if>
+            <if test="imgurl1 != null  and imgurl1 != ''"> and imgurl1 = #{imgurl1}</if>
+            <if test="imgurl2 != null  and imgurl2 != ''"> and imgurl2 = #{imgurl2}</if>
+        </where>
+    </select>
+    
+    <select id="selectPComplianceById" parameterType="Long" resultMap="PComplianceResult">
+        <include refid="selectPComplianceVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPCompliance" parameterType="com.financia.common.PCompliance" useGeneratedKeys="true" keyProperty="id">
+        insert into p_compliance
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="contentstr != null and contentstr != ''">contentstr,</if>
+            <if test="type != null">type,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="name1 != null and name1 != ''">name1,</if>
+            <if test="name2 != null and name2 != ''">name2,</if>
+            <if test="imgurl1 != null and imgurl1 != ''">imgurl1,</if>
+            <if test="imgurl2 != null and imgurl2 != ''">imgurl2,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="contentstr != null and contentstr != ''">#{contentstr},</if>
+            <if test="type != null">#{type},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="name1 != null and name1 != ''">#{name1},</if>
+            <if test="name2 != null and name2 != ''">#{name2},</if>
+            <if test="imgurl1 != null and imgurl1 != ''">#{imgurl1},</if>
+            <if test="imgurl2 != null and imgurl2 != ''">#{imgurl2},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePCompliance" parameterType="com.financia.common.PCompliance">
+        update p_compliance
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="contentstr != null">contentstr = #{contentstr},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="name1 != null and name1 != ''">name1 = #{name1},</if>
+            <if test="name2 != null and name2 != ''">name2 = #{name2},</if>
+            <if test="imgurl1 != null">imgurl1 = #{imgurl1},</if>
+            <if test="imgurl2 != null">imgurl2 = #{imgurl2},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePComplianceById" parameterType="Long">
+        delete from p_compliance where id = #{id}
+    </delete>
+
+    <delete id="deletePComplianceByIds" parameterType="String">
+        delete from p_compliance where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

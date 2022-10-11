@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.system.mapper.ProductMapper">
+
+    <resultMap type="com.financia.system.domain.Product" id="ProductResult">
+        <id     property="id"              column="id"                />
+        <result property="price"           column="price"             />
+        <result property="stock"           column="stock"             />
+        <result property="lastUpdateTime"  column="last_update_time"  />
+    </resultMap>
+
+    <select id="selectById" parameterType="com.financia.system.domain.Product" resultMap="ProductResult">
+        select id, price, stock, last_update_time
+        from product where id = #{productId}
+    </select>
+
+    <update id="updateById" parameterType="com.financia.system.domain.Product">
+        update product set price = #{price}, stock = #{stock}, last_update_time = sysdate() where id = #{id}
+    </update>
+    
+</mapper>

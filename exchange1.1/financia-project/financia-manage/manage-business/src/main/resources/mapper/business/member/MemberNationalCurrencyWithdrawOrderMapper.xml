@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.business.member.mapper.MemberNationalCurrencyWithdrawOrderMapper">
+    
+    <resultMap type="com.financia.exchange.MemberNationalCurrencyWithdrawOrder" id="MemberNationalCurrencyWithdrawOrderResult">
+        <result property="id"    column="id"    />
+        <result property="memberId"    column="member_id"    />
+        <result property="type"    column="type"    />
+        <result property="collectionNumber"    column="collection_number"    />
+        <result property="collectionName"    column="collection_name"    />
+        <result property="bankName"    column="bank_name"    />
+        <result property="payNumber"    column="pay_number"    />
+        <result property="payName"    column="pay_name"    />
+        <result property="orderNo"    column="order_no"    />
+        <result property="money"    column="money"    />
+        <result property="coinId"    column="coin_id"    />
+        <result property="rechargeStatus"    column="recharge_status"    />
+        <result property="orderStatus"    column="order_status"    />
+        <result property="checkStatus"    column="check_status"    />
+        <result property="remark"    column="remark"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="payBank"    column="pay_bank"    />
+        <result property="username"    column="username"    />
+        <result property="exchangeCoinName"    column="exchange_coin_name"    />
+        <result property="exchangeCoinZhName"    column="exchange_coin_zh_name"    />
+    </resultMap>
+
+    <sql id="selectMemberNationalCurrencyWithdrawOrderVo">
+        select mncro.*,m.username,p.exchange_coin_name,p.exchange_coin_zh_name
+        from member_national_currency_withdraw_order mncro
+        left join member m on m.id=mncro.member_id
+        left join p_national_currency p on p.id=mncro.coin_id
+    </sql>
+
+    <select id="selectMemberNationalCurrencyWithdrawOrderList" parameterType="com.financia.exchange.MemberNationalCurrencyWithdrawOrder" resultMap="MemberNationalCurrencyWithdrawOrderResult">
+        <include refid="selectMemberNationalCurrencyWithdrawOrderVo"/>
+        <where>  
+            <if test="memberId != null  and memberId != ''"> and member_id = #{memberId}</if>
+            <if test="type != null "> and type = #{type}</if>
+            <if test="collectionNumber != null  and collectionNumber != ''"> and collection_number = #{collectionNumber}</if>
+            <if test="collectionName != null  and collectionName != ''"> and collection_name like concat('%', #{collectionName}, '%')</if>
+            <if test="bankName != null  and bankName != ''"> and bank_name like concat('%', #{bankName}, '%')</if>
+            <if test="payNumber != null  and payNumber != ''"> and pay_number = #{payNumber}</if>
+            <if test="payName != null  and payName != ''"> and pay_name like concat('%', #{payName}, '%')</if>
+            <if test="orderNo != null  and orderNo != ''"> and order_no = #{orderNo}</if>
+            <if test="money != null "> and money = #{money}</if>
+            <if test="coinId != null  and coinId != ''"> and coin_id = #{coinId}</if>
+            <if test="rechargeStatus != null "> and recharge_status = #{rechargeStatus}</if>
+            <if test="orderStatus != null "> and order_status = #{orderStatus}</if>
+            <if test="username != null "> and m.username = #{username}</if>
+        </where>
+        order by mncro.create_time desc
+    </select>
+    
+    <select id="selectMemberNationalCurrencyWithdrawOrderById" parameterType="Long" resultMap="MemberNationalCurrencyWithdrawOrderResult">
+        <include refid="selectMemberNationalCurrencyWithdrawOrderVo"/>
+        where mncro.id = #{id}
+    </select>
+        
+    <insert id="insertMemberNationalCurrencyWithdrawOrder" parameterType="com.financia.exchange.MemberNationalCurrencyWithdrawOrder" useGeneratedKeys="true" keyProperty="id">
+        insert into member_national_currency_withdraw_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="memberId != null and memberId != ''">member_id,</if>
+            <if test="type != null">type,</if>
+            <if test="collectionNumber != null and collectionNumber != ''">collection_number,</if>
+            <if test="collectionName != null and collectionName != ''">collection_name,</if>
+            <if test="bankName != null and bankName != ''">bank_name,</if>
+            <if test="payNumber != null and payNumber != ''">pay_number,</if>
+            <if test="payName != null and payName != ''">pay_name,</if>
+            <if test="orderNo != null and orderNo != ''">order_no,</if>
+            <if test="money != null">money,</if>
+            <if test="coinId != null and coinId != ''">coin_id,</if>
+            <if test="rechargeStatus != null">recharge_status,</if>
+            <if test="orderStatus != null">order_status,</if>
+            <if test="checkStatus != null">check_status,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+            <if test="updateBy != null and updateBy != ''">update_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="payBank != null">pay_bank,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="memberId != null and memberId != ''">#{memberId},</if>
+            <if test="type != null">#{type},</if>
+            <if test="collectionNumber != null and collectionNumber != ''">#{collectionNumber},</if>
+            <if test="collectionName != null and collectionName != ''">#{collectionName},</if>
+            <if test="bankName != null and bankName != ''">#{bankName},</if>
+            <if test="payNumber != null and payNumber != ''">#{payNumber},</if>
+            <if test="payName != null and payName != ''">#{payName},</if>
+            <if test="orderNo != null and orderNo != ''">#{orderNo},</if>
+            <if test="money != null">#{money},</if>
+            <if test="coinId != null and coinId != ''">#{coinId},</if>
+            <if test="rechargeStatus != null">#{rechargeStatus},</if>
+            <if test="orderStatus != null">#{orderStatus},</if>
+            <if test="checkStatus != null">#{checkStatus},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
+            <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="payBank != null">#{payBank},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMemberNationalCurrencyWithdrawOrder" parameterType="com.financia.exchange.MemberNationalCurrencyWithdrawOrder">
+        update member_national_currency_withdraw_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="memberId != null and memberId != ''">member_id = #{memberId},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="collectionNumber != null and collectionNumber != ''">collection_number = #{collectionNumber},</if>
+            <if test="collectionName != null and collectionName != ''">collection_name = #{collectionName},</if>
+            <if test="bankName != null and bankName != ''">bank_name = #{bankName},</if>
+            <if test="payNumber != null and payNumber != ''">pay_number = #{payNumber},</if>
+            <if test="payName != null and payName != ''">pay_name = #{payName},</if>
+            <if test="orderNo != null and orderNo != ''">order_no = #{orderNo},</if>
+            <if test="money != null">money = #{money},</if>
+            <if test="coinId != null and coinId != ''">coin_id = #{coinId},</if>
+            <if test="rechargeStatus != null">recharge_status = #{rechargeStatus},</if>
+            <if test="orderStatus != null">order_status = #{orderStatus},</if>
+            <if test="checkStatus != null">check_status = #{checkStatus},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="payBank != null">pay_bank = #{payBank},</if>
+            update_time = date_format(now(),'%Y-%m-%d %H:%i:%s')
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMemberNationalCurrencyWithdrawOrderById" parameterType="Long">
+        delete from member_national_currency_withdraw_order where id = #{id}
+    </delete>
+
+    <delete id="deleteMemberNationalCurrencyWithdrawOrderByIds" parameterType="String">
+        delete from member_national_currency_withdraw_order where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

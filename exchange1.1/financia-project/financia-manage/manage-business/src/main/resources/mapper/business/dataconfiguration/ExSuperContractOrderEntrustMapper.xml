@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.financia.business.dataconfiguration.mapper.ExSuperContractOrderEntrustMapper">
+    
+    <resultMap type="com.financia.superleverage.SuperContractOrderEntrust" id="ExSuperContractOrderEntrustResult">
+        <result property="id"    column="id"    />
+        <result property="baseSymbol"    column="base_symbol"    />
+        <result property="closeFee"    column="close_fee"    />
+        <result property="coinSymbol"    column="coin_symbol"    />
+        <result property="symbol"    column="symbol"    />
+        <result property="contractId"    column="contract_id"    />
+        <result property="contractOrderEntrustId"    column="contract_order_entrust_id"    />
+        <result property="currentPrice"    column="current_price"    />
+        <result property="direction"    column="direction"    />
+        <result property="entrustPrice"    column="entrust_price"    />
+        <result property="entrustType"    column="entrust_type"    />
+        <result property="isBlast"    column="is_blast"    />
+        <result property="isFromSpot"    column="is_from_spot"    />
+        <result property="memberId"    column="member_id"    />
+        <result property="openFee"    column="open_fee"    />
+        <result property="patterns"    column="patterns"    />
+        <result property="principalAmount"    column="principal_amount"    />
+        <result property="principalUnit"    column="principal_unit"    />
+        <result property="profitAndLoss"    column="profit_and_loss"    />
+        <result property="shareNumber"    column="share_number"    />
+        <result property="tradedPrice"    column="traded_price"    />
+        <result property="tradedVolume"    column="traded_volume"    />
+        <result property="triggerPrice"    column="trigger_price"    />
+        <result property="forceClosePrice"    column="force_close_price"    />
+        <result property="triggeringTime"    column="triggering_time"    />
+        <result property="type"    column="type"    />
+        <result property="volume"    column="volume"    />
+        <result property="leverage"    column="leverage"    />
+        <result property="value"    column="value"    />
+        <result property="stopProfitPrice"    column="stop_profit_price"    />
+        <result property="stopLossPrice"    column="stop_loss_price"    />
+        <result property="closeOrderType"    column="close_order_type"    />
+        <result property="walletId"    column="wallet_id"    />
+        <result property="avaPrice"    column="ava_price"    />
+        <result property="backAsset"    column="back_asset"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="username"    column="username"    />
+    </resultMap>
+
+    <sql id="selectExSuperContractOrderEntrustVo">
+        select
+        scoe.*,m.username
+        from ex_super_contract_order_entrust scoe
+        left join member m on m.id=scoe.member_id
+    </sql>
+
+    <select id="selectExSuperContractOrderEntrustList" parameterType="com.financia.superleverage.SuperContractOrderEntrust" resultMap="ExSuperContractOrderEntrustResult">
+        <include refid="selectExSuperContractOrderEntrustVo"/>
+        <where>  
+            <if test="baseSymbol != null  and baseSymbol != ''"> and scoe.base_symbol = #{baseSymbol}</if>
+            <!--<if test="closeFee != null "> and close_fee = #{closeFee}</if>-->
+            <if test="coinSymbol != null  and coinSymbol != ''"> and scoe.coin_symbol = #{coinSymbol}</if>
+            <if test="symbol != null  and symbol != ''"> and scoe.symbol = #{symbol}</if>
+            <if test="contractId != null "> and scoe.contract_id = #{contractId}</if>
+            <!--<if test="contractOrderEntrustId != null  and contractOrderEntrustId != ''"> and contract_order_entrust_id = #{contractOrderEntrustId}</if>-->
+            <if test="currentPrice != null "> and scoe.current_price = #{currentPrice}</if>
+            <if test="direction != null "> and scoe.direction = #{direction}</if>
+            <if test="entrustPrice != null "> and scoe.entrust_price = #{entrustPrice}</if>
+            <if test="entrustType != null "> and scoe.entrust_type = #{entrustType}</if>
+            <!--<if test="isBlast != null "> and is_blast = #{isBlast}</if>-->
+            <!--<if test="isFromSpot != null "> and is_from_spot = #{isFromSpot}</if>-->
+            <if test="memberId != null "> and scoe.member_id = #{memberId}</if>
+            <!--<if test="openFee != null "> and open_fee = #{openFee}</if>-->
+            <if test="patterns != null "> and scoe.patterns = #{patterns}</if>
+            <if test="principalAmount != null "> and scoe.principal_amount = #{principalAmount}</if>
+            <if test="principalUnit != null  and principalUnit != ''"> and principal_unit = #{principalUnit}</if>
+            <if test="profitAndLoss != null "> and scoe.profit_and_loss = #{profitAndLoss}</if>
+            <if test="shareNumber != null "> and scoe.share_number = #{shareNumber}</if>
+            <if test="tradedPrice != null "> and scoe.traded_price = #{tradedPrice}</if>
+            <if test="tradedVolume != null "> and scoe.traded_volume = #{tradedVolume}</if>
+            <if test="triggerPrice != null "> and scoe.trigger_price = #{triggerPrice}</if>
+            <if test="forceClosePrice != null "> and scoe.force_close_price = #{forceClosePrice}</if>
+            <if test="triggeringTime != null "> and scoe.triggering_time = #{triggeringTime}</if>
+            <if test="type != null "> and scoe.type = #{type}</if>
+            <if test="volume != null "> and scoe.volume = #{volume}</if>
+            <if test="leverage != null "> and scoe.leverage = #{leverage}</if>
+            <!--<if test="value != null "> and value = #{value}</if>-->
+            <!--<if test="stopProfitPrice != null "> and stop_profit_price = #{stopProfitPrice}</if>
+            <if test="stopLossPrice != null "> and stop_loss_price = #{stopLossPrice}</if>-->
+            <if test="closeOrderType != null "> and scoe.close_order_type = #{closeOrderType}</if>
+            <if test="walletId != null "> and scoe.wallet_id = #{walletId}</if>
+            <if test="avaPrice != null "> and scoe.ava_price = #{avaPrice}</if>
+            <if test="backAsset != null "> and scoe.back_asset = #{backAsset}</if>
+            <if test="status != null "> and scoe.status = #{status}</if>
+            <if test="username != null and username != ''"> and m.username = #{username}</if>
+        </where>
+        order by scoe.create_time desc
+    </select>
+    
+    <select id="selectExSuperContractOrderEntrustById" parameterType="Long" resultMap="ExSuperContractOrderEntrustResult">
+        <include refid="selectExSuperContractOrderEntrustVo"/>
+        where scoe.id = #{id}
+    </select>
+        
+    <insert id="insertExSuperContractOrderEntrust" parameterType="com.financia.superleverage.SuperContractOrderEntrust" useGeneratedKeys="true" keyProperty="id">
+        insert into ex_super_contract_order_entrust
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="baseSymbol != null">base_symbol,</if>
+            <if test="closeFee != null">close_fee,</if>
+            <if test="coinSymbol != null">coin_symbol,</if>
+            <if test="symbol != null">symbol,</if>
+            <if test="contractId != null">contract_id,</if>
+            <if test="contractOrderEntrustId != null">contract_order_entrust_id,</if>
+            <if test="currentPrice != null">current_price,</if>
+            <if test="direction != null">direction,</if>
+            <if test="entrustPrice != null">entrust_price,</if>
+            <if test="entrustType != null">entrust_type,</if>
+            <if test="isBlast != null">is_blast,</if>
+            <if test="isFromSpot != null">is_from_spot,</if>
+            <if test="memberId != null">member_id,</if>
+            <if test="openFee != null">open_fee,</if>
+            <if test="patterns != null">patterns,</if>
+            <if test="principalAmount != null">principal_amount,</if>
+            <if test="principalUnit != null">principal_unit,</if>
+            <if test="profitAndLoss != null">profit_and_loss,</if>
+            <if test="shareNumber != null">share_number,</if>
+            <if test="tradedPrice != null">traded_price,</if>
+            <if test="tradedVolume != null">traded_volume,</if>
+            <if test="triggerPrice != null">trigger_price,</if>
+            <if test="forceClosePrice != null">force_close_price,</if>
+            <if test="triggeringTime != null">triggering_time,</if>
+            <if test="type != null">type,</if>
+            <if test="volume != null">volume,</if>
+            <if test="leverage != null">leverage,</if>
+            <if test="value != null">value,</if>
+            <if test="stopProfitPrice != null">stop_profit_price,</if>
+            <if test="stopLossPrice != null">stop_loss_price,</if>
+            <if test="closeOrderType != null">close_order_type,</if>
+            <if test="walletId != null">wallet_id,</if>
+            <if test="avaPrice != null">ava_price,</if>
+            <if test="backAsset != null">back_asset,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="baseSymbol != null">#{baseSymbol},</if>
+            <if test="closeFee != null">#{closeFee},</if>
+            <if test="coinSymbol != null">#{coinSymbol},</if>
+            <if test="symbol != null">#{symbol},</if>
+            <if test="contractId != null">#{contractId},</if>
+            <if test="contractOrderEntrustId != null">#{contractOrderEntrustId},</if>
+            <if test="currentPrice != null">#{currentPrice},</if>
+            <if test="direction != null">#{direction},</if>
+            <if test="entrustPrice != null">#{entrustPrice},</if>
+            <if test="entrustType != null">#{entrustType},</if>
+            <if test="isBlast != null">#{isBlast},</if>
+            <if test="isFromSpot != null">#{isFromSpot},</if>
+            <if test="memberId != null">#{memberId},</if>
+            <if test="openFee != null">#{openFee},</if>
+            <if test="patterns != null">#{patterns},</if>
+            <if test="principalAmount != null">#{principalAmount},</if>
+            <if test="principalUnit != null">#{principalUnit},</if>
+            <if test="profitAndLoss != null">#{profitAndLoss},</if>
+            <if test="shareNumber != null">#{shareNumber},</if>
+            <if test="tradedPrice != null">#{tradedPrice},</if>
+            <if test="tradedVolume != null">#{tradedVolume},</if>
+            <if test="triggerPrice != null">#{triggerPrice},</if>
+            <if test="forceClosePrice != null">#{forceClosePrice},</if>
+            <if test="triggeringTime != null">#{triggeringTime},</if>
+            <if test="type != null">#{type},</if>
+            <if test="volume != null">#{volume},</if>
+            <if test="leverage != null">#{leverage},</if>
+            <if test="value != null">#{value},</if>
+            <if test="stopProfitPrice != null">#{stopProfitPrice},</if>
+            <if test="stopLossPrice != null">#{stopLossPrice},</if>
+            <if test="closeOrderType != null">#{closeOrderType},</if>
+            <if test="walletId != null">#{walletId},</if>
+            <if test="avaPrice != null">#{avaPrice},</if>
+            <if test="backAsset != null">#{backAsset},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateExSuperContractOrderEntrust" parameterType="com.financia.superleverage.SuperContractOrderEntrust">
+        update ex_super_contract_order_entrust
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="baseSymbol != null">base_symbol = #{baseSymbol},</if>
+            <if test="closeFee != null">close_fee = #{closeFee},</if>
+            <if test="coinSymbol != null">coin_symbol = #{coinSymbol},</if>
+            <if test="symbol != null">symbol = #{symbol},</if>
+            <if test="contractId != null">contract_id = #{contractId},</if>
+            <if test="contractOrderEntrustId != null">contract_order_entrust_id = #{contractOrderEntrustId},</if>
+            <if test="currentPrice != null">current_price = #{currentPrice},</if>
+            <if test="direction != null">direction = #{direction},</if>
+            <if test="entrustPrice != null">entrust_price = #{entrustPrice},</if>
+            <if test="entrustType != null">entrust_type = #{entrustType},</if>
+            <if test="isBlast != null">is_blast = #{isBlast},</if>
+            <if test="isFromSpot != null">is_from_spot = #{isFromSpot},</if>
+            <if test="memberId != null">member_id = #{memberId},</if>
+            <if test="openFee != null">open_fee = #{openFee},</if>
+            <if test="patterns != null">patterns = #{patterns},</if>
+            <if test="principalAmount != null">principal_amount = #{principalAmount},</if>
+            <if test="principalUnit != null">principal_unit = #{principalUnit},</if>
+            <if test="profitAndLoss != null">profit_and_loss = #{profitAndLoss},</if>
+            <if test="shareNumber != null">share_number = #{shareNumber},</if>
+            <if test="tradedPrice != null">traded_price = #{tradedPrice},</if>
+            <if test="tradedVolume != null">traded_volume = #{tradedVolume},</if>
+            <if test="triggerPrice != null">trigger_price = #{triggerPrice},</if>
+            <if test="forceClosePrice != null">force_close_price = #{forceClosePrice},</if>
+            <if test="triggeringTime != null">triggering_time = #{triggeringTime},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="volume != null">volume = #{volume},</if>
+            <if test="leverage != null">leverage = #{leverage},</if>
+            <if test="value != null">value = #{value},</if>
+            <if test="stopProfitPrice != null">stop_profit_price = #{stopProfitPrice},</if>
+            <if test="stopLossPrice != null">stop_loss_price = #{stopLossPrice},</if>
+            <if test="closeOrderType != null">close_order_type = #{closeOrderType},</if>
+            <if test="walletId != null">wallet_id = #{walletId},</if>
+            <if test="avaPrice != null">ava_price = #{avaPrice},</if>
+            <if test="backAsset != null">back_asset = #{backAsset},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteExSuperContractOrderEntrustById" parameterType="Long">
+        delete from ex_super_contract_order_entrust where id = #{id}
+    </delete>
+
+    <delete id="deleteExSuperContractOrderEntrustByIds" parameterType="String">
+        delete from ex_super_contract_order_entrust where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

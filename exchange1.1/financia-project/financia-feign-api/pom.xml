@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.financia</groupId>
+        <artifactId>financia-project</artifactId>
+        <version>3.5.0</version>
+        <relativePath/>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <modules>
+        <module>financia-api-system</module>
+        <module>financia-api-exchange</module>
+        <module>financia-app-common-feign</module>
+        <module>financia-api-quantitative</module>
+        <module>financia-api-superLeverage</module>
+        <module>financia-api-swap</module>
+
+    </modules>
+
+    <artifactId>financia-feign-api</artifactId>
+    <packaging>pom</packaging>
+
+    <description>
+        financia-api系统接口
+    </description>
+
+</project>
